@@ -78,8 +78,10 @@ def _from_app() -> list[Deal]:
     seen = set()
 
     for period in meta.json().get("periods", []):
-        if not (period.get("bonusStartDate", "") <= today <= period.get("bonusEndDate", "9999")):
-            continue
+        if period.get("bonusEndDate", "9999") < today:
+            continue                       # already over
+        week = "volgende" if period.get("bonusStartDate", "") > today else "deze"
+        day = today if week == "deze" else period["bonusStartDate"]
         for section in period.get("urlMetadataList", []):
             r = s.get(f"{API}/mobile-services/{section['url'].lstrip('/')}", timeout=30)
             if not r.ok:
@@ -90,14 +92,16 @@ def _from_app() -> list[Deal]:
                     products.append(item["product"])
                 if item.get("bonusGroup"):
                     g = s.get(f"{API}/mobile-services/bonuspage/v1/segment", timeout=30, params={
-                        "date": today, "segmentId": item["bonusGroup"]["id"],
+                        "date": day, "segmentId": item["bonusGroup"]["id"],
                         "includeActivatableDiscount": "false"})
                     if g.ok:
                         products += g.json().get("products", [])
                 for p in products:
-                    key = p.get("webshopId") or p.get("title")
+                    key = (week, p.get("webshopId") or p.get("title"))
                     if key in seen:
                         continue
                     seen.add(key)
-                    deals.append(_to_deal(p, period))
+                    deal = _to_deal(p, period)
+                    deal.week = week
+                    deals.append(deal)
     return deals

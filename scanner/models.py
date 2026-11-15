@@ -26,6 +26,13 @@ class Deal:
     min_qty: int = 1                # how many you must buy to get the deal
     discount_pct: Optional[int] = field(default=None)    # direct discount on a single item
     effective_pct: Optional[int] = field(default=None)   # discount per item IF you buy min_qty
+    # filled in by enrich.py / history.py
+    key: str = ""                   # normalized product name, same across stores and weeks
+    group: str = ""                 # same product at several stores share a group id
+    unit_price: Optional[float] = None   # price per kg / l / stuk, for the price you pay per item
+    unit: str = ""
+    week: str = "deze"              # "deze" (this week) or "volgende" (starts later)
+    tags: list = field(default_factory=list)   # e.g. ["Beste prijs in 8 weken"]
 
     def finalize(self) -> "Deal":
         self.title = " ".join((self.title or "").split())
@@ -51,6 +58,17 @@ class Deal:
             self.discount_pct = price_pct if price_pct is not None else pct
             self.effective_pct = self.discount_pct
         return self
+
+    def pay_per_item(self) -> Optional[float]:
+        """What one item costs you when you take the deal as intended."""
+        if self.deal_type != MULTI:
+            return self.price_now
+        if self.price_was and self.price_now and self.price_now < self.price_was:
+            return self.price_now                    # shop already shows the per-item price
+        base = self.price_was or self.price_now
+        if base and self.effective_pct:
+            return round(base * (1 - self.effective_pct / 100), 2)
+        return self.price_now
 
     def to_dict(self) -> dict:
         return asdict(self)

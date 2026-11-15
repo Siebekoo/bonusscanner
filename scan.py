@@ -16,11 +16,14 @@ import sys
 import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime
+import os
+from datetime import date, datetime
 from pathlib import Path
 
 from scanner.stores import STORES, run_store
 from scanner.report import write_html
+from scanner.enrich import enrich
+from scanner import history
 
 ROOT = Path(__file__).parent
 
@@ -30,8 +33,9 @@ def main():
     ap.add_argument("--only", help="comma-separated: " + ",".join(STORES))
     ap.add_argument("--debug", action="store_true", help="save raw responses/screenshots")
     ap.add_argument("--show", action="store_true", help="show the browser window")
-    ap.add_argument("--workers", type=int, default=3, help="stores scanned in parallel")
+    ap.add_argument("--workers", type=int, default=4, help="stores scanned in parallel")
     ap.add_argument("--out", default=str(ROOT / "output"))
+    ap.add_argument("--no-history", action="store_true", help="don't read or save price history")
     args = ap.parse_args()
 
     keys = [k.strip() for k in args.only.split(",")] if args.only else list(STORES)
@@ -70,16 +74,35 @@ def main():
                 if args.debug:
                     traceback.print_exc()
 
+    today = date.today()
+    all_deals = enrich(all_deals, today)
+    counts = {STORES[k]["name"]: 0 for k in keys}
+    for d in all_deals:
+        counts[d.store] = counts.get(d.store, 0) + 1
+    for name, st in status.items():
+        st["count"] = counts.get(name, 0)
+
+    hist_dir = ROOT / "history"
+    past = [] if args.no_history else history.load(hist_dir, today)
+    history.annotate(all_deals, past, today)
+    warnings = history.health(counts, past)
+    if not args.no_history and all_deals:
+        history.save(hist_dir, today, all_deals, counts)
+
     # direct discounts first, then multi-buy deals (1+1 etc.)
     all_deals.sort(key=lambda d: (d.deal_type == "meer kopen", -(d.effective_pct or 0),
                                   d.store, d.title))
     payload = {
         "generated": datetime.now().isoformat(timespec="minutes"),
+        "today": today.isoformat(),
+        "history_days": len(past),
         "stores": status,
-        "deals": [d.to_dict() for d in all_deals],
+        "warnings": warnings,
+        "deals": [dict(d.to_dict(), pay=d.pay_per_item()) for d in all_deals],
     }
     (out / "deals.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1), "utf-8")
     write_html(payload, out / "deals.html")
+    report_warnings(warnings, counts)
 
     print(f"\n{len(all_deals)} deals total")
     print(f"  -> {out / 'deals.html'}")
@@ -90,6 +113,25 @@ def main():
     empty = [n for n, s in status.items() if not s["count"]]
     if empty:
         print(f"\nNo deals from: {', '.join(empty)}. Run with --debug --only <store> to see why.")
+
+
+def report_warnings(warnings, counts):
+    """Print warnings; on GitHub also show them on the run page."""
+    if warnings:
+        print("\nWarnings:")
+        for w in warnings:
+            print(f"  ! {w}")
+    if os.environ.get("GITHUB_ACTIONS"):
+        for w in warnings:
+            print(f"::warning::{w}")
+        summary = os.environ.get("GITHUB_STEP_SUMMARY")
+        if summary:
+            lines = ["## Bonusscanner", "", "| Winkel | Aanbiedingen |", "|---|---:|"]
+            lines += [f"| {n} | {c} |" for n, c in sorted(counts.items())]
+            if warnings:
+                lines += ["", "### Waarschuwingen"] + [f"- {w}" for w in warnings]
+            with open(summary, "a", encoding="utf-8") as f:
+                f.write("\n".join(lines) + "\n")
 
 
 if __name__ == "__main__":

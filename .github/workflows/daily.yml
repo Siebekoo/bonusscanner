@@ -7,7 +7,7 @@ on:
   workflow_dispatch:          # adds a "Run workflow" button for running it by hand
 
 permissions:
-  contents: read
+  contents: write     # to save the daily price history back into the repository
   pages: write
   id-token: write
 
@@ -39,6 +39,18 @@ jobs:
       # If no store returns anything, scan.py fails and yesterday's page stays online.
       - name: Scan stores
         run: xvfb-run -a python scan.py
+
+      # Keeps a small file per day in history/ so the page can show
+      # "Beste prijs in 8 weken" etc. The daily commit should also count as activity,
+      # so GitHub is less likely to switch off the schedule after 60 days.
+      - name: Save price history
+        run: |
+          git config user.name "bonusscanner-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add history
+          git diff --cached --quiet || git commit -m "Price history $(date +%F)"
+          git pull --rebase --autostash
+          git push
 
       - name: Prepare site
         run: cp output/deals.html output/index.html

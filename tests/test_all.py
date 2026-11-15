@@ -49,6 +49,84 @@ def test_direct_vs_multi():
     assert (a.deal_type, a.discount_pct, a.min_qty) == ("korting", 30, 1)
     assert (b.deal_type, b.discount_pct, b.effective_pct, b.min_qty) == ("meer kopen", None, 50, 2)
 
+def test_categories():
+    from scanner.models import Deal
+    from scanner.enrich import categorize
+    cases = {"Calvé pindakaas 350 g": "Ontbijt & beleg", "Jonge Goudse kaas 48+": "Zuivel & eieren",
+             "Garnier serum": "Drogisterij", "Bacardi rum 70 cl": "Bier, wijn & sterk",
+             "Crème fraîche 200 ml": "Zuivel & eieren", "Boterhamworst": "Vlees & vis",
+             "Milka melkchocolade": "Snoep & koek", "Lay's chips paprika": "Chips & noten",
+             "Hollandse tomaten": "Groente & fruit", "Coca-Cola Zero 6 x 330 ml": "Frisdrank & sap",
+             "Pampers luiers maat 4": "Baby", "Robijn wasverzachter": "Huishouden",
+             "Vivera vegetarische kipstuckjes": "Vegetarisch", "Tomatenpuree 70 g": "Voorraadkast"}
+    wrong = {t: categorize(Deal(store="X", title=t)) for t in cases
+             if categorize(Deal(store="X", title=t)) != cases[t]}
+    assert not wrong, wrong
+
+def test_unit_price_and_grouping():
+    from scanner.models import Deal
+    from scanner.enrich import enrich
+    from datetime import date
+    ds = [Deal(store="AH", title="AH Halfvolle melk", size="1 l", price_now=1.09, price_was=1.25),
+          Deal(store="Jumbo", title="Jumbo Halfvolle melk", size="1 l", price_now=0.99, price_was=1.19),
+          Deal(store="PLUS", title="Coca-Cola Zero", size="6 x 330 ml", deal_text="1+1 gratis", price_now=5.49),
+          Deal(store="Dirk", title="Bekijk alle aanbiedingen", price_now=1.0),
+          Deal(store="Dirk", title="Oude aanbieding", price_now=1.0, valid_until="2026-01-01")]
+    out = enrich([d.finalize() for d in ds], date(2026, 11, 18))
+    assert [d.title for d in out] == ["AH Halfvolle melk", "Jumbo Halfvolle melk", "Coca-Cola Zero"]
+    milk = out[:2]
+    assert milk[0].group and milk[0].group == milk[1].group
+    assert (milk[0].unit_price, milk[0].unit) == (1.09, "l")
+    cola = out[2]
+    assert cola.pay_per_item() == 2.75 and cola.unit_price == 1.39 and cola.unit == "l"
+
+def test_next_week():
+    from scanner.models import Deal
+    from scanner.enrich import enrich
+    from datetime import date
+    d = Deal(store="AH", title="Pindakaas", price_now=2.0, valid_from="2026-11-23").finalize()
+    assert enrich([d], date(2026, 11, 18))[0].week == "volgende"
+
+def test_history_and_health():
+    sys.path.insert(0, str(Path(__file__).parent))
+    from sample_data import build
+    p = build()
+    tags = [t for d in p["deals"] for t in d["tags"]]
+    assert any(t.startswith("Beste prijs in") for t in tags)
+    assert any(t == "Vaak in de aanbieding" for t in tags)
+    assert p["warnings"] and p["warnings"][0].startswith("Kruidvat: vandaag 0")
+    assert not any("nieuwsbrief" in d["title"] for d in p["deals"])
+    assert {d["week"] for d in p["deals"]} == {"deze", "volgende"}
+
+def test_page_in_browser():
+    """Open the sample page and use every feature; fail on any JavaScript error."""
+    sys.path.insert(0, str(Path(__file__).parent))
+    from sample_data import build
+    from playwright.sync_api import sync_playwright
+    out = Path(tempfile.mkdtemp()) / "page.html"
+    write_html(build(), out)
+    errors = []
+    with sync_playwright() as p:
+        b = browser._launch(p, headful=False)
+        pg = b.new_page()
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        pg.goto(out.as_uri())
+        n = lambda: pg.locator("#grid .card").count()
+        assert n() > 20
+        pg.fill("#q", "cola"); pg.wait_for_timeout(300)
+        assert 0 < n() < 20
+        pg.fill("#q", ""); pg.wait_for_timeout(300)
+        pg.check("#cmp"); assert pg.locator(".cmp").count() > 3; pg.uncheck("#cmp")
+        pg.locator("#grid .star").first.click()
+        pg.locator(".tab", has_text="Mijn lijst").click()
+        assert n() >= 1
+        pg.reload(); pg.wait_for_timeout(200)
+        assert n() >= 1, "favorites should survive a reload"
+        pg.locator(".tab", has_text="Volgende week").click(); assert n() > 10
+        pg.click("#theme")
+        b.close()
+    assert not errors, errors
+
 def _serve():
     h = functools.partial(http.server.SimpleHTTPRequestHandler,
                           directory=str(Path(__file__).parent / "site"))

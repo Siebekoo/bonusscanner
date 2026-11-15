@@ -1,7 +1,24 @@
 # Bonusscanner
 
-Collects this week's deals from Albert Heijn, Jumbo, Hoogvliet, Etos, Kruidvat, Dirk, Aldi,
-Lidl, PLUS and Makro into one searchable page.
+Collects this week's (and next week's) deals from Albert Heijn, Jumbo, Hoogvliet, Etos,
+Kruidvat, Dirk, Aldi, Lidl, PLUS, Vomar, DekaMarkt, Coop, Spar, Action, Gall & Gall and
+Makro into one page.
+
+## What the page does
+
+- **Deze week / Volgende week**: deals starting later go to "Volgende week".
+- **★ Mijn lijst**: tap ☆ on a product, or type words like "pepsi max". Matching deals
+  from every store show up here. Your list is saved on your own device only.
+- **Categories** (Zuivel, Drinken, Drogisterij, ...), store chips and search. The first tap
+  on a store shows only that store; tap more stores to add them.
+- **Vergelijk winkels**: the same product at several stores side by side, cheapest first.
+- **Price per kg / liter** on every card, and a sort option for it.
+- **Price history tags**: "Beste prijs in 8 weken", "Vaak in de aanbieding", "Nieuw",
+  "Was eerder €x". These appear once a few weeks of history exist.
+- **Deel**: copies a link that opens the page with your current filters.
+- **Dark mode** (🌙 button).
+- **Warning bar** when a store returns 0 deals or far fewer than usual, which usually means
+  its website changed and the scraper needs fixing.
 
 ## Setup (once)
 
@@ -22,6 +39,7 @@ python scan.py                     # all stores, takes a few minutes
 python scan.py --only ah,lidl      # selected stores
 python scan.py --show              # show the browser window
 python scan.py --debug --only plus # save raw data and screenshots to debug/
+python tests/sample_data.py        # preview the page with fake data (output/sample.html)
 ```
 
 Open `output/deals.html` in a browser. You can search, sort by discount or price, filter
@@ -45,6 +63,13 @@ Deals come in two types, which are kept separate:
   2e halve prijs or 3 voor €5. The badge shows the discount per item *when you buy the
   full amount*: "-50% bij 2". These are listed after the direct discounts by default.
 
+## Price history
+
+Every run saves a small file in `history/` (about 30 KB per day; files older than about a
+year are deleted). The online run commits these files to your repository every morning.
+Because of that, always click **Sync Changes** in VS Code (it pulls before pushing) rather
+than force-pushing, or you'll overwrite the history.
+
 ## When a store returns 0 deals
 
 Store websites change regularly, so this will happen sometimes.
@@ -57,6 +82,13 @@ Store websites change regularly, so this will happen sometimes.
 
 ## Known limitations
 
+- **Vomar, DekaMarkt, Coop, Spar and Gall & Gall** were added with their likely offers
+  addresses, which could not be tested. If one stays at 0, fix its URL in `scanner/stores.py`.
+  Spar applies many deals only in the shopping cart, so it may find little.
+- **Categories** come from keywords in the product name. Some products will land in
+  "Overig" or the wrong group. Add words to the lists in `scanner/enrich.py`.
+- **Vergelijk winkels** matches products by name, so it sometimes groups variants that
+  differ slightly (e.g. Coca-Cola and Coca-Cola Zero).
 - **Makro** is a wholesaler. Many prices only appear after logging in with a Makro card,
   and prices are usually excl. btw.
 - **Lidl and Aldi** split offers by day (e.g. starting Monday, Thursday or Saturday). Some
@@ -90,8 +122,9 @@ publish the page at `https://<your-github-name>.github.io/bonusscanner/`.
 Notes:
 - GitHub's servers are not in the Netherlands. Some stores may block them, even if those
   stores work from your own PC. Check the store chips on the page: dashed ones failed.
-- For public repositories with no new commits, GitHub switches scheduled runs off after
-  60 days and sends you an email first. Click the link in that email to keep it running.
+- For public repositories without activity, GitHub switches scheduled runs off after
+  60 days. The daily history commit should count as activity. If GitHub emails you that the
+  workflow will be disabled, click the link in that email to keep it running.
 
 ## Run it on your own PC instead
 

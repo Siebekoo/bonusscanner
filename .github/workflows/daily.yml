@@ -1,0 +1,51 @@
+# Runs the scanner every morning on GitHub's servers and publishes the page with GitHub Pages.
+name: Daily deals
+
+on:
+  schedule:
+    - cron: "15 5 * * *"     # 05:15 UTC = 06:15 in winter, 07:15 in summer (NL time)
+  workflow_dispatch:          # adds a "Run workflow" button for running it by hand
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  scan-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      # xvfb gives the "retry with a normal browser window" step a virtual screen.
+      # If no store returns anything, scan.py fails and yesterday's page stays online.
+      - name: Scan stores
+        run: xvfb-run -a python scan.py
+
+      - name: Prepare site
+        run: cp output/deals.html output/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: output
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

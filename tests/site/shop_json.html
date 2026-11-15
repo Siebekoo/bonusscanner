@@ -1,0 +1,9 @@
+<!doctype html><html><body>
+<div id="cb"><button onclick="this.parentNode.remove();window.ok=1">Alles accepteren</button></div>
+<h1>Aanbiedingen</h1><div id="list"></div>
+<script>
+let page=0;
+async function load(){ if(page>2) return; const r=await fetch('/api/offers'+page+'.json'); page++;
+  const j=await r.json(); j.data.promotions.forEach(p=>{const d=document.createElement('div');d.style.height='400px';d.textContent=p.product.title;list.appendChild(d)});}
+load(); addEventListener('scroll',()=>{ if(innerHeight+scrollY>=document.body.scrollHeight-50) load(); });
+</script></body></html>

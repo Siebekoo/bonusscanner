@@ -7,7 +7,7 @@ under "Volgende week". Deals whose start date is in the future go there automati
 """
 from __future__ import annotations
 
-from . import ah, jumbo, browser
+from . import ah, jumbo, browser, plus
 
 STORES = {
     "ah": {
@@ -47,6 +47,7 @@ STORES = {
     "plus": {
         "name": "PLUS",
         "url": "https://www.plus.nl/aanbiedingen",
+        "parser": plus.parse,       # reads PLUS's deal data file directly
     },
     # --- added later. These addresses are best guesses; the health check on the page
     # will show if one finds nothing, and then the URL needs fixing here.
@@ -90,7 +91,7 @@ def run_store(key: str, **opts):
         def go(**o):
             return browser.fetch_page(cfg["name"], cfg["url"],
                                       extra_urls=cfg.get("extra_urls", ()),
-                                      cents=cfg.get("cents", False), **o)
+                                      cents=cfg.get("cents", False), parser=cfg.get("parser"), **o)
         deals = go(**opts)
         if cfg.get("next_url"):
             try:

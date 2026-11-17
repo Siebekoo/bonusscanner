@@ -18,11 +18,11 @@ jobs:
       - run: |
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
-      - run: xvfb-run -a python scan.py --debug --only plus,gall,etos --no-history --no-prices || true
+      - run: xvfb-run -a python scan.py --debug --only plus,gall --no-history --no-prices || true
       - name: Save debug files to this branch
         run: |
           mkdir -p debug-output
-          cp debug/*.png debug/*_deals_raw.json debug/*_cards.json debug-output/ 2>/dev/null || true
+          cp debug/*.png debug/*.html debug/*_deals_raw.json debug/*_cards.json debug-output/ 2>/dev/null || true
           for f in debug/*_responses.json; do
             # keep big files manageable
             head -c 15000000 "$f" | gzip > "debug-output/$(basename "$f").gz"
@@ -31,3 +31,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add debug-output
           git commit -m "Debug output" && git push
+# run 2

@@ -15,7 +15,9 @@ from .models import Deal
 TITLE_KEYS = ("title", "name", "productName", "displayName", "productTitle", "label")
 NOW_KEYS = ("price_now", "promotionalPrice", "promotionPriceValue", "offerPrice", "promotionPrice", "promoPrice", "discountPrice",
             "salePrice", "specialPrice", "bonusPrice", "currentPrice", "price", "sellingPrice",
-            "actionPrice", "now", "amount", "value")
+            "actionPrice", "now")
+# note: no bare "amount"/"value" here: on a product object those are usually a quantity
+# (amount: 1 = one in your cart). Inside a price object they are handled by parse_price().
 WAS_KEYS = ("oldPrice", "originalPrice", "regularPrice", "priceBefore", "priceBeforeBonus",
             "wasPrice", "listPrice", "strikethroughPrice", "previousPrice", "fromPrice",
             "basePrice", "was", "old")
@@ -45,6 +47,9 @@ def parse_price(v: Any, cents: bool = False) -> Optional[float]:
         val = v / 100 if cents else float(v)
         return val if 0 < val < 2000 else None
     if isinstance(v, str):
+        # "€1,00 korting", "2 voor 5,00", "25% korting" are deals, not prices
+        if re.search(r"korting|gratis|voor|%|\+|per\s*(kg|kilo|liter|l\b|stuk)|/\s*(kg|l)\b", v, re.I):
+            return None
         m = PRICE_STR.search(v.replace(" ", ""))
         if m:
             return float(f"{m.group(1)}.{m.group(2)}")
@@ -123,7 +128,9 @@ def _all_prices(d: dict, cents: bool, depth=0) -> list[float]:
     for k, v in d.items():
         if SKIP_PRICE.search(k):
             continue
-        priceish = re.search(r"price|prijs|amount|^now$|^was$|^old$", k, re.I)
+        # top level: only keys that say "price"; inside a price object also amount/now/was
+        priceish = re.search(r"price|prijs", k, re.I) or (
+            depth > 0 and re.search(r"amount|^now$|^was$|^old$|^value$", k, re.I))
         if priceish and not isinstance(v, (dict, list)):
             p = parse_price(v, cents or "cent" in k.lower())
             if p:
@@ -159,7 +166,7 @@ def looks_like_offer(d: dict, cents: bool, ctx: dict | None = None) -> Optional[
     if was == now:
         was = None
     size = _first(d, SIZE_KEYS)
-    return Deal(
+    deal = Deal(
         store="",
         title=title,
         deal_text=" · ".join(promos[:2]),
@@ -171,6 +178,8 @@ def looks_like_offer(d: dict, cents: bool, ctx: dict | None = None) -> Optional[
         valid_from=str(_first(d, DATE_FROM) or ctx.get("from", ""))[:10],
         valid_until=str(_first(d, DATE_TO) or ctx.get("until", ""))[:10],
     )
+    deal._raw = d          # kept only for --debug output
+    return deal
 
 
 def walk(obj: Any, cents: bool = False, max_nodes: int = 300_000) -> list[Deal]:

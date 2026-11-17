@@ -58,10 +58,8 @@ STORES = {
         "name": "DekaMarkt",
         "url": "https://www.dekamarkt.nl/aanbiedingen",
     },
-    "coop": {
-        "name": "Coop",
-        "url": "https://www.coop.nl/aanbiedingen",
-    },
+    # Coop merged into PLUS and its site now shows PLUS's deals, so it's left out to
+    # avoid duplicates.
     "spar": {
         "name": "Spar",
         # Spar applies many deals only in the cart, so this may find little.
@@ -105,12 +103,32 @@ def run_store(key: str, **opts):
                 print(f"    {cfg['name']}: next week failed ({str(e).splitlines()[0][:80]})")
         # Some sites (Etos, Kruidvat) block invisible browsers. Retry once with a normal
         # browser window, placed off-screen so it doesn't get in your way.
+        visible = {**opts, "headful": True, "offscreen": True} if not opts.get("headful") else opts
         if not deals and not opts.get("headful"):
             print(f"    {cfg['name']}: nothing found, retrying with a normal browser window")
             try:
-                deals = go(**{**opts, "headful": True, "offscreen": True})
+                deals = go(**visible)
             except Exception as e:
                 print(f"    {cfg['name']}: retry failed ({str(e).splitlines()[0][:80]})")
+        # Still nothing: maybe the offers page moved. Look for it on the homepage.
+        if not deals:
+            try:
+                found = browser.discover_offer_urls(cfg["url"], headful=visible.get("headful"),
+                                                    offscreen=visible.get("offscreen", False))
+            except Exception as e:
+                found = []
+                print(f"    {cfg['name']}: homepage search failed ({str(e).splitlines()[0][:80]})")
+            for alt in found:
+                if alt.rstrip("/") == cfg["url"].rstrip("/"):
+                    continue
+                print(f"    {cfg['name']}: trying {alt}")
+                try:
+                    deals = browser.fetch_page(cfg["name"], alt, cents=cfg.get("cents", False), **visible)
+                except Exception:
+                    deals = []
+                if deals:
+                    print(f"    {cfg['name']}: found deals at {alt}  (tip: put this URL in scanner/stores.py)")
+                    break
     for d in deals:
         d.store = cfg["name"]
         d.finalize()

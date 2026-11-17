@@ -87,8 +87,11 @@ def _cards_to_deals(cards: list[dict]) -> list[Deal]:
         if now is None:
             prices = []
             for l in lines:
-                if l in promo or re.search(r"per\s*(kg|kilo|liter|l\b|stuk)|/\s*(kg|l)\b", l, re.I):
+                if l in promo or l == c.get("alt") or len(l) > 40 \
+                        or re.search(r"per\s*(kg|kilo|liter|l\b|stuk)|/\s*(kg|l)\b", l, re.I):
                     continue
+                # skip numbers that are sizes: "6.75 l", "1,5 kg", "33 x 42.5 cm"
+                l = re.sub(r"\d+[.,]\d+\s*(?:x|×|l\b|ltr|liter|kg|g\b|gr|ml|cl|cm|mm|m\b|w\b|v\b)", " ", l, flags=re.I)
                 prices += [parse_price(x) for x in re.findall(PRICE_RE, l)]
             prices = [p for p in prices if p]
             if prices:
@@ -161,6 +164,10 @@ def fetch_page(store_name: str, url: str, *, extra_urls=(), cents=False, headful
         slug = re.sub(r"\W+", "_", store_name.lower())
         (debug_dir / f"{slug}_responses.json").write_text(
             json.dumps(captured, ensure_ascii=False, indent=1)[:50_000_000], encoding="utf-8")
+        sample = [{"found": {k: v for k, v in d.to_dict().items() if v not in ("", None, [], 1)},
+                   "raw": getattr(d, "_raw", None)} for d in deals[:40]]
+        (debug_dir / f"{slug}_deals_raw.json").write_text(
+            json.dumps(sample, ensure_ascii=False, indent=1, default=str)[:2_000_000], encoding="utf-8")
         (debug_dir / f"{slug}_cards.json").write_text(
             json.dumps(cards, ensure_ascii=False, indent=1), encoding="utf-8")
         print(f"    [debug] {len(captured)} JSON responses, {len(cards)} cards, used: {source}")
@@ -175,6 +182,44 @@ def fetch_page(store_name: str, url: str, *, extra_urls=(), cents=False, headful
         if not d.url:
             d.url = url
     return dedupe(deals)
+
+
+OFFER_LINK = re.compile(r"aanbieding|\bacties?\b|/acties|folder|bonus|weekdeal|weekactie|"
+                        r"deals?\b|voordeel|korting", re.I)
+NOT_OFFER = re.compile(r"voorwaarden|cookie|privacy|vacature|klantenservice|\.pdf|login|inlog|"
+                       r"account|app\b|nieuwsbrief|contact|over-ons|faq", re.I)
+
+
+def discover_offer_urls(url: str, *, headful=False, offscreen=False, limit=3) -> list[str]:
+    """Open the store's homepage and return links that look like an offers page."""
+    from urllib.parse import urlparse
+    from playwright.sync_api import sync_playwright
+    root = "{0.scheme}://{0.netloc}/".format(urlparse(url))
+    host = urlparse(url).netloc.replace("www.", "")
+    with sync_playwright() as p:
+        browser = _launch(p, headful, offscreen)
+        ctx = browser.new_context(locale="nl-NL", user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            f"(KHTML, like Gecko) Chrome/{browser.version} Safari/537.36"))
+        ctx.add_init_script(STEALTH_JS)
+        page = ctx.new_page()
+        page.goto(root, wait_until="domcontentloaded", timeout=60_000)
+        page.wait_for_timeout(2500)
+        _accept_cookies(page)
+        links = page.evaluate("""() => [...document.querySelectorAll('a[href]')]
+            .map(a => ({href: a.href, text: (a.innerText || a.getAttribute('aria-label') || '').trim()}))""")
+        browser.close()
+    scored = {}
+    for l in links:
+        href, text = l["href"].split("#")[0], l["text"][:60]
+        if host not in href or NOT_OFFER.search(href) or href.rstrip("/") == root.rstrip("/"):
+            continue
+        if not (OFFER_LINK.search(href) or OFFER_LINK.search(text)):
+            continue
+        score = (3 if re.search(r"aanbieding", text + href, re.I) else 0) \
+              + (2 if re.search(r"deze week|alle", text, re.I) else 0) - href.count("/") * 0.1
+        scored[href] = max(score, scored.get(href, -99))
+    return [h for h, _ in sorted(scored.items(), key=lambda x: -x[1])][:limit]
 
 
 def _launch(p, headful, offscreen=False):

@@ -28,6 +28,15 @@ from scanner import history
 ROOT = Path(__file__).parent
 
 
+def now_nl() -> datetime:
+    """Dutch time, also when running on GitHub's servers (which use UTC)."""
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.now(ZoneInfo("Europe/Amsterdam"))
+    except Exception:
+        return datetime.now()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--only", help="comma-separated: " + ",".join(STORES))
@@ -36,6 +45,8 @@ def main():
     ap.add_argument("--workers", type=int, default=4, help="stores scanned in parallel")
     ap.add_argument("--out", default=str(ROOT / "output"))
     ap.add_argument("--no-history", action="store_true", help="don't read or save price history")
+    ap.add_argument("--push", action="store_true",
+                    help="upload results to GitHub (for stores that block GitHub's servers)")
     args = ap.parse_args()
 
     keys = [k.strip() for k in args.only.split(",")] if args.only else list(STORES)
@@ -74,7 +85,22 @@ def main():
                 if args.debug:
                     traceback.print_exc()
 
-    today = date.today()
+    today = now_nl().date()
+
+    if args.push:
+        push_results(all_deals, keys, today)
+
+    # Stores that found nothing here (e.g. blocked on GitHub's servers): use recent
+    # results uploaded from your own PC, if there are any.
+    for k in keys:
+        name = STORES[k]["name"]
+        if not any(d.store == name for d in all_deals):
+            extra = load_pushed(k, today)
+            if extra:
+                all_deals += extra
+                status[name] = {"ok": True, "count": len(extra), "via": "pc"}
+                print(f"  PC  {name:<13} {len(extra):>4} deals from your PC")
+
     all_deals = enrich(all_deals, today)
     counts = {STORES[k]["name"]: 0 for k in keys}
     for d in all_deals:
@@ -82,18 +108,25 @@ def main():
     for name, st in status.items():
         st["count"] = counts.get(name, 0)
 
-    hist_dir = ROOT / "history"
-    past = [] if args.no_history else history.load(hist_dir, today)
+    # GitHub keeps the shared history in history/. Runs on your own PC use history-local/
+    # (not uploaded), so the two never clash when you sync.
+    on_github = bool(os.environ.get("GITHUB_ACTIONS"))
+    hist_dir = ROOT / "history" if on_github else ROOT / "history-local"
+    past = []
+    if not args.no_history:
+        by_date = {d["date"]: d for d in history.load(ROOT / "history-local", today)}
+        by_date.update({d["date"]: d for d in history.load(ROOT / "history", today)})
+        past = [by_date[k] for k in sorted(by_date)]
     history.annotate(all_deals, past, today)
     warnings = history.health(counts, past)
-    if not args.no_history and all_deals:
+    if not args.no_history and all_deals and not args.push:
         history.save(hist_dir, today, all_deals, counts)
 
     # direct discounts first, then multi-buy deals (1+1 etc.)
     all_deals.sort(key=lambda d: (d.deal_type == "meer kopen", -(d.effective_pct or 0),
                                   d.store, d.title))
     payload = {
-        "generated": datetime.now().isoformat(timespec="minutes"),
+        "generated": now_nl().strftime("%Y-%m-%dT%H:%M"),
         "today": today.isoformat(),
         "history_days": len(past),
         "stores": status,
@@ -113,6 +146,54 @@ def main():
     empty = [n for n, s in status.items() if not s["count"]]
     if empty:
         print(f"\nNo deals from: {', '.join(empty)}. Run with --debug --only <store> to see why.")
+
+
+PUSH_DIR = ROOT / "pushed"
+MAX_AGE_DAYS = 3
+
+
+def push_results(deals, keys, today):
+    """Save results per store in pushed/ and upload them to GitHub with git."""
+    import subprocess
+    PUSH_DIR.mkdir(exist_ok=True)
+    saved = []
+    for k in keys:
+        name = STORES[k]["name"]
+        rows = [d.to_dict() for d in deals if d.store == name]
+        if rows:
+            (PUSH_DIR / f"{k}.json").write_text(json.dumps(
+                {"date": today.isoformat(), "store": name, "deals": rows}, ensure_ascii=False), "utf-8")
+            saved.append(name)
+    if not saved:
+        print("\nNothing to upload.")
+        return
+    cmds = [["git", "add", "pushed"],
+            ["git", "commit", "-m", f"Deals from PC {today}: {', '.join(saved)}"],
+            ["git", "pull", "--rebase", "--autostash"],
+            ["git", "push"]]
+    for c in cmds:
+        r = subprocess.run(c, cwd=ROOT, capture_output=True, text=True)
+        if r.returncode and not (c[1] == "commit" and "nothing to commit" in r.stdout + r.stderr):
+            print(f"\nUpload failed at '{' '.join(c)}':\n{(r.stderr or r.stdout).strip()[:400]}")
+            return
+    print(f"\nUploaded to GitHub: {', '.join(saved)}")
+
+
+def load_pushed(key, today):
+    from scanner.models import Deal
+    from dataclasses import fields
+    path = PUSH_DIR / f"{key}.json"
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text("utf-8"))
+        age = (today - date.fromisoformat(data["date"])).days
+    except (ValueError, KeyError, json.JSONDecodeError):
+        return []
+    if age > MAX_AGE_DAYS:
+        return []
+    names = {f.name for f in fields(Deal)} - {"key", "group", "tags", "unit_price", "unit"}
+    return [Deal(**{k: v for k, v in row.items() if k in names}) for row in data["deals"]]
 
 
 def report_warnings(warnings, counts):

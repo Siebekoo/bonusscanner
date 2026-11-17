@@ -245,6 +245,39 @@ def test_implausible_discount():
     real = Deal(store="X", title="Wasmiddel", deal_text="70% korting", price_now=3.0, price_was=10.0).finalize()
     assert real.discount_pct == 70
 
+def test_gall_style_tiles():
+    """Icons next to prices, cents added with CSS, full price only in screen-reader labels."""
+    srv = _serve(); base = f"http://127.0.0.1:{srv.server_port}"
+    deals = {d.title: d.finalize() for d in browser.fetch_page("Gall & Gall", base + "/shop_gall.html")}
+    assert set(deals) == {"Bacardí Carta Blanca", "Smirnoff"}, deals.keys()
+    b = deals["Bacardí Carta Blanca"]
+    assert (b.price_now, b.price_was, b.discount_pct) == (24.99, 32.99, 24)
+    assert b.image.endswith("IMG_685921.png") and b.url.endswith("769851.html")
+
+def test_plus_reader():
+    from scanner import plus
+    offer = lambda **k: {"Brand": "PLUS", "Name": "x", "Example": "", "Package": "", "Slug": "4455-1",
+                         "NewPrice": "0", "PriceOriginal_Product": "0", "PriceOriginal_Lowest": "0",
+                         "PriceOriginal_Highest": "0", "DisplayInfo_Label": "", "DisplayInfo_PromotionBasedLabel": "",
+                         "StartDate": "2026-11-11", "EndDate": "2026-11-17", "ImageURL": "", "IsFreeDeliveryOffer": False, **k}
+    data = {"url": "https://www.plus.nl/screenservices/x/DataActionGetPromotionList_Optimization",
+            "data": {"data": {"PromotionOfferList": {"List": [{"Category": {"Offers": {"List": [
+                offer(Brand="Alle Pampers", Name="", Example="Bijv. Premium Protection maat 3",
+                      NewPrice="31.98", PriceOriginal_Lowest="47.97", DisplayInfo_Label="2+1 GRATIS"),
+                offer(Name="Courgette groen", Example="Per 1 st", PriceOriginal_Product="0.89",
+                      DisplayInfo_Label="2 VOOR 1.00", Slug="plus-courgette-groen-stuk-1-st-114068"),
+                offer(Name="Handappels", Example="Per 1000 gram", NewPrice="1.00", PriceOriginal_Product="1.49"),
+                offer(Name="Bolletje", DisplayInfo_Label="Gratis bezorging BIJ 10.00 EURO", IsFreeDeliveryOffer=True),
+            ]}}}]}}}}
+    deals = {d.title: d.finalize() for d in plus.parse([data])}
+    assert len(deals) == 3
+    p = next(d for t, d in deals.items() if "Pampers" in t)
+    assert (p.min_qty, p.pay_per_item(), p.price_was) == (3, 10.66, 15.99)
+    c = deals["PLUS Courgette groen"]
+    assert (c.deal_text, c.pay_per_item(), c.size) == ("2 voor €1,00", 0.5, "1 st")
+    assert c.url == "https://www.plus.nl/product/plus-courgette-groen-stuk-1-st-114068"
+    assert deals["PLUS Handappels"].discount_pct == 33
+
 def test_report():
     out = Path(tempfile.mkdtemp()) / "x.html"
     write_html({"generated": "2026-11-15T15:00", "stores": {"A": {"ok": True, "count": 1}},

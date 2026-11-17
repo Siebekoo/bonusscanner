@@ -49,20 +49,36 @@ DOM_CARDS_JS = r"""
   const priceRe = /\d+[.,]\d{2}|\d+\s*voor|\d\s*\+\s*\d|gratis|korting|%/i;
   const sel = '[class*="product"], [class*="Product"], [class*="tile"], [class*="card"], '
             + '[class*="offer"], [class*="promo"], article, li';
+  // a product photo, not a small icon (Gall & Gall puts an info.svg next to each price)
+  const isPhoto = img => {
+    const src = img.currentSrc || img.src || img.getAttribute('data-src') || '';
+    if (/\.svg(\?|$)|icon|logo|sprite|badge|flag/i.test(src)) return false;
+    const w = img.naturalWidth || img.width || 0;
+    return w === 0 || w >= 48;      // 0 = not loaded yet (lazy), give it the benefit of the doubt
+  };
+  const photoIn = el => [...el.querySelectorAll('img')].find(isPhoto);
   const cands = [...document.querySelectorAll(sel)].filter(el => {
     const t = el.innerText || '';
-    return t.length > 3 && t.length < 400 && priceRe.test(t) && el.querySelector('img');
+    return t.length > 3 && t.length < 600 && priceRe.test(t) && photoIn(el);
   });
   // keep the innermost matching elements only
   const inner = cands.filter(el => !cands.some(o => o !== el && el.contains(o)));
   return inner.slice(0, 1500).map(el => {
-    const img = el.querySelector('img');
+    const img = photoIn(el);
+    const nameEl = el.querySelector('[class*="name" i], [class*="title" i], [class*="description" i], h2, h3, h4, [itemprop="name"]');
+    const links = [...el.querySelectorAll('a[href]')].map(a => (a.getAttribute('title') || a.innerText || '').trim())
+                    .filter(t => t.length > 3 && !/\d+[.,]\d{2}/.test(t));
     const a = el.closest('a') || el.querySelector('a');
-    const parts = [];
+    // screen-reader labels often hold the full price ("Van: € 32.99 voor: € 24.99") when the
+    // visible text doesn't (Gall & Gall shows "24." and adds the cents with CSS)
+    const parts = [el, ...el.querySelectorAll('[aria-label]')]
+      .map(x => (x.getAttribute && x.getAttribute('aria-label')) || '')
+      .filter(t => /€|\d+[.,]\d{2}/.test(t));
     const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     while (w.nextNode()) { const t = w.currentNode.textContent.trim(); if (t) parts.push(t); }
-    return { text: parts.join('\n'), img: img ? (img.currentSrc || img.src || '') : '',
-             alt: img ? img.alt : '', href: a ? a.href : '' };
+    return { text: parts.join('\n'), img: img ? (img.currentSrc || img.src || img.getAttribute('data-src') || '') : '',
+             alt: img ? img.alt : '', href: a ? a.href : '',
+             name: nameEl ? nameEl.innerText.trim() : (links.sort((x, y) => y.length - x.length)[0] || '') };
   });
 }
 """
@@ -72,18 +88,49 @@ PRICE_RE = r"\d+[.,]\d{2}"
 DEAL_LINE = re.compile(r"\d\s*\+\s*\d|gratis|halve prijs|korting|%|(?<![\d.,€])\d{1,2}\s*voor\b", re.I)
 
 
+GENERIC_ALT = re.compile(r"^(info|image|img|product|afbeelding|foto|photo|picture|thumbnail|icon|"
+                         r"truck|box|logo|banner)?$", re.I)
+
+
+def _card_title(c: dict, text_lines: list[str]) -> str:
+    """Product name: the tile's name element, a meaningful image alt, the longest text line,
+    or as a last resort the product link (gall.nl/bacardi-carta-blanca-150cl-769851.html)."""
+    for cand in (c.get("name", ""), c.get("alt", "")):
+        cand = " ".join((cand or "").split())
+        if cand and not GENERIC_ALT.match(cand) and not re.fullmatch(r"[\d\s.,€%+-]*", cand):
+            return cand[:140]
+    useful = [l for l in text_lines if not re.match(r"(normaal|van|nu|per|vanaf|op=op)\b", l, re.I)]
+    if useful:
+        return max(useful, key=len)
+    slug = (c.get("href") or "").rstrip("/").split("/")[-1]
+    slug = re.sub(r"[-_]\d{4,}$", "", re.sub(r"\.html?$", "", slug))
+    if len(slug) > 3:
+        words = slug.replace("-", " ").replace("_", " ").strip()
+        return words[:1].upper() + words[1:]
+    return ""
+
+
 def _cards_to_deals(cards: list[dict]) -> list[Deal]:
     deals = []
     for c in cards:
         text = c["text"]
         lines = [l.strip() for l in text.splitlines() if l.strip()]
+        # prices split over two elements: "24." + "99" or "24" + ",99" -> "24.99"
+        merged = []
+        for l in lines:
+            if merged and re.fullmatch(r"[.,]?\d{2}", l) and re.fullmatch(r"(€\s*)?\d+[.,]?", merged[-1]):
+                merged[-1] = merged[-1].rstrip(".,") + "." + l.lstrip(".,")
+            else:
+                merged.append(l)
+        lines = merged
+        text = "\n".join(lines)
         now = was = None
         # "van € 14.99 voor € 7.50"
-        m = re.search(rf"van\s*€?\s*({PRICE_RE})\s*voor\s*€?\s*({PRICE_RE})", text, re.I)
+        m = re.search(rf"van:?\s*€?\s*({PRICE_RE})\s*voor:?\s*€?\s*({PRICE_RE})", text, re.I)
         if m:
             was, now = parse_price(m.group(1)), parse_price(m.group(2))
         promo = [l for l in lines if DEAL_LINE.search(l) and len(l) < 50
-                 and not re.match(r"van\s*€", l, re.I)]
+                 and not re.match(r"van:?\s*€", l, re.I)]
         if now is None:
             prices = []
             for l in lines:
@@ -99,7 +146,7 @@ def _cards_to_deals(cards: list[dict]) -> list[Deal]:
                 was = max(prices) if len(set(prices)) > 1 else None
         text_lines = [l for l in lines if not re.search(PRICE_RE, l)
                       and l not in promo and len(l) > 3]
-        title = c.get("alt") or (max(text_lines, key=len) if text_lines else "")
+        title = _card_title(c, text_lines)
         if not title:
             continue
         deals.append(Deal(store="", title=title, deal_text=" · ".join(promo[:2]),
@@ -109,7 +156,7 @@ def _cards_to_deals(cards: list[dict]) -> list[Deal]:
 
 
 def fetch_page(store_name: str, url: str, *, extra_urls=(), cents=False, headful=False,
-               offscreen: bool = False,
+               offscreen: bool = False, parser=None,
                debug_dir: Path | None = None, max_scrolls: int = 40, **_) -> list[Deal]:
     from playwright.sync_api import sync_playwright
 
@@ -152,11 +199,23 @@ def fetch_page(store_name: str, url: str, *, extra_urls=(), cents=False, headful
                 debug_dir.mkdir(parents=True, exist_ok=True)
                 slug = re.sub(r"\W+", "_", store_name.lower())
                 page.screenshot(path=str(debug_dir / f"{slug}.png"), full_page=False)
+                try:
+                    (debug_dir / f"{slug}.html").write_text(page.content()[:5_000_000], encoding="utf-8")
+                except Exception:
+                    pass
         browser.close()
 
-    deals = walk([c["data"] for c in captured] + embedded, cents=cents)
-    source = "json"
-    if len(deals) < 5:                      # JSON gave nothing useful: use visible cards
+    deals, source = [], "json"
+    if parser:                              # store-specific reader (e.g. PLUS)
+        try:
+            deals = parser(captured)
+            source = "store reader"
+        except Exception as e:
+            print(f"    {store_name}: store reader failed ({e}), using the general one")
+    if not deals:
+        deals = walk([c["data"] for c in captured] + embedded, cents=cents)
+        source = "json"
+    if len(deals) < 5 and source == "json":                      # JSON gave nothing useful: use visible cards
         deals = _cards_to_deals(cards)
         source = "page"
 

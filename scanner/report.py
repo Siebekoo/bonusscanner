@@ -45,6 +45,27 @@ label.toggle{display:flex;align-items:center;gap:6px;font-size:14px;cursor:point
 .chip.term b{margin-left:6px;cursor:pointer;opacity:.6}
 .fav{display:none;margin-top:10px}
 .fav.show{display:block}
+.cheap{display:none;margin-top:10px}
+.cheap.show{display:block}
+.cheap input[type=search]{width:100%}
+.cheap .opts{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:14px}
+.cheap .opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.hidden{display:none!important}
+.grp{grid-column:1/-1;margin:10px 0 2px;font-weight:700;font-size:15px}
+.grp span{font-weight:400;color:var(--mute);font-size:13px;margin-left:6px}
+.prow{grid-column:1/-1;display:grid;grid-template-columns:28px 1fr auto;gap:2px 12px;align-items:center;
+      background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:inherit;text-decoration:none}
+.prow:hover{border-color:var(--mute)}
+.prow.top{border-color:var(--good);background:var(--goodbg)}
+.prow .rk{color:var(--mute);font-weight:700;text-align:center}
+.prow .nm{font-weight:600;font-size:14px}
+.prow .st{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+.prow .dl{font-size:12px;font-weight:700;color:var(--acc)}
+.prow .dl.multi{color:var(--blue)}
+.prow .up{font-weight:700;font-size:17px;text-align:right;white-space:nowrap}
+.prow .pp{font-size:12px;color:var(--mute);text-align:right;white-space:nowrap}
+.prow .was{font-size:12px}
+.loading{grid-column:1/-1;text-align:center;color:var(--mute);padding:40px}
 .fav form{display:flex;gap:8px}
 .fav button{border:none;background:var(--ink);color:var(--bg);border-radius:8px;padding:8px 14px;cursor:pointer}
 .hint{font-size:12px;color:var(--mute);margin-top:6px}
@@ -117,7 +138,15 @@ main{padding:16px 20px;display:grid;grid-template-columns:repeat(auto-fill,minma
     <div class="chips" id="terms"></div>
     <div class="hint">Of tik op ☆ bij een product. Je lijst wordt alleen op dit apparaat bewaard.</div>
   </div>
-  <div class="bar">
+  <div class="cheap" id="cheap">
+    <input type="search" id="cq" placeholder="Wat heb je nodig? bv. toiletpapier, pindakaas, cola zero, wasmiddel" autocomplete="off">
+    <div class="opts">
+      <label><input type="checkbox" id="cmulti" checked> Ook deals waarvoor je meer moet kopen (1+1, 2e halve prijs…)</label>
+      <label><input type="checkbox" id="cper" checked> Alleen de goedkoopste per winkel</label>
+    </div>
+    <div class="hint" id="cnote"></div>
+  </div>
+  <div class="bar" id="dealbar">
     <input type="search" id="q" placeholder="Zoek product, bv. koffie, pindakaas, shampoo…">
     <select id="type">
       <option value="">Alle deals</option>
@@ -143,7 +172,7 @@ main{padding:16px 20px;display:grid;grid-template-columns:repeat(auto-fill,minma
   </div>
   <div class="chips" id="cats"></div>
   <div class="chips" id="stores"></div>
-  <div class="legend"><b class="d">-30%</b> korting op 1 stuk &nbsp; <b class="m">-50% bij 2</b> alleen als je meer koopt</div>
+  <div class="legend" id="legend"><b class="d">-30%</b> korting op 1 stuk &nbsp; <b class="m">-50% bij 2</b> alleen als je meer koopt</div>
 </header>
 <main id="grid"></main>
 <div class="toast" id="toast"></div>
@@ -164,7 +193,8 @@ const store = {
 };
 
 // ---------- state
-const S = { tab:'deze', q:'', type:'', sort:'pct', min:0, cat:'', off:new Set(), cmp:false, shown:120 };
+const S = { tab:'deze', q:'', type:'', sort:'pct', min:0, cat:'', off:new Set(), cmp:false, shown:120,
+            cq:'', cmulti:true, cper:true };
 let favs = store.get('bonus_favs', {terms:[], keys:[]});
 
 function readHash(){
@@ -173,6 +203,8 @@ function readHash(){
   S.q = p.get('q') || ''; S.type = p.get('type') || ''; S.sort = p.get('sort') || 'pct';
   S.min = +(p.get('min') || 0); S.cat = p.get('cat') || ''; S.cmp = p.get('cmp') === '1';
   if (p.get('only')) { const keep = new Set(p.get('only').split('|')); S.off = new Set(Object.keys(DATA.stores).filter(s => !keep.has(s))); }
+  S.cq = p.get('cq') || ''; S.cmulti = p.get('cmulti') !== '0'; S.cper = p.get('cper') !== '0';
+  $('cq').value = S.cq; $('cmulti').checked = S.cmulti; $('cper').checked = S.cper;
   $('q').value = S.q; $('type').value = S.type; $('sort').value = S.sort; $('min').value = S.min; $('cmp').checked = S.cmp;
 }
 function writeHash(){
@@ -181,6 +213,7 @@ function writeHash(){
   if (S.q) p.set('q', S.q); if (S.type) p.set('type', S.type);
   if (S.sort !== 'pct') p.set('sort', S.sort); if (S.min) p.set('min', S.min);
   if (S.cat) p.set('cat', S.cat); if (S.cmp) p.set('cmp', '1');
+  if (S.cq) p.set('cq', S.cq); if (!S.cmulti) p.set('cmulti', '0'); if (!S.cper) p.set('cper', '0');
   if (S.off.size) p.set('only', Object.keys(DATA.stores).filter(s => !S.off.has(s)).join('|'));
   const h = p.toString();
   try { history.replaceState(null, '', h ? '#' + h : location.pathname + location.search); } catch(e){}
@@ -286,12 +319,18 @@ function render(resetPaging = true){
   // tabs
   const count = t => ALL.filter(d => t === 'fav' ? isFav(d) : d.week === t).length;
   const nNext = count('volgende');
-  const tabs = [['deze', 'Deze week', count('deze')]];
+  const tabs = [['deze', 'Deze week', count('deze')], ['cheap', '🔍 Goedkoopst', '']];
   if (nNext) tabs.push(['volgende', 'Volgende week', nNext]);
   tabs.push(['fav', '★ Mijn lijst', count('fav')]);
   if (S.tab === 'volgende' && !nNext) S.tab = 'deze';
   $('tabs').innerHTML = tabs.map(([k, l, n]) => `<button class="tab${S.tab === k ? ' on' : ''}" data-t="${k}">${l}<span class="n">${n}</span></button>`).join('');
   $('tabs').querySelectorAll('.tab').forEach(t => t.onclick = () => { S.tab = t.dataset.t; render(); });
+
+  // "where is it cheapest" has its own panel and list
+  const cheap = S.tab === 'cheap';
+  $('cheap').classList.toggle('show', cheap);
+  ['dealbar', 'cats', 'stores', 'legend'].forEach(id => $(id).classList.toggle('hidden', cheap));
+  if (cheap) { $('fav').classList.remove('show'); renderCheap(); writeHash(); return; }
 
   // my list
   $('fav').classList.toggle('show', S.tab === 'fav');
@@ -357,6 +396,98 @@ function render(resetPaging = true){
   $('grid').querySelectorAll('.star').forEach(s => s.onclick = e => { e.preventDefault(); toggleStar(+s.dataset.i); });
   writeHash();
 }
+// ---------- "Goedkoopst": regular prices of everything (Checkjebon) + this week's deals
+let P = null, PN = null, pLoading = false, pFailed = false;
+const UNIT_LABEL = {kg:'per kilo', l:'per liter', stuk:'per stuk', rol:'per rol', wasbeurt:'per wasbeurt',
+                    tablet:'per tablet', luier:'per luier', ei:'per ei', doekje:'per doekje'};
+const UNIT_SHORT = {kg:'kg', l:'l', stuk:'st', rol:'rol', wasbeurt:'wasbeurt', tablet:'tablet', luier:'luier', ei:'ei', doekje:'doekje'};
+function loadPrices(){
+  if (P || pLoading || pFailed) return;
+  if (window.PRICES) { initPrices(); return; }
+  pLoading = true;
+  const sc = document.createElement('script');
+  sc.src = 'prices.js';
+  sc.onload = () => { pLoading = false; initPrices(); if (S.tab === 'cheap') render(false); };
+  sc.onerror = () => { pLoading = false; pFailed = true; if (S.tab === 'cheap') render(false); };
+  document.head.appendChild(sc);
+}
+function initPrices(){
+  P = window.PRICES;
+  PN = P.items.map(r => ' ' + norm(r[1] + ' ' + r[3]).replace(/[^a-z0-9]+/g, ' ') + ' ');
+}
+function cheapResults(){
+  const words = norm(S.cq).replace(/[^a-z0-9]+/g, ' ').trim().split(' ').filter(Boolean);
+  if (!words.length) return null;
+  const groups = {}, noUnit = [];
+  for (let i = 0; i < P.items.length; i++) {
+    const n = PN[i];
+    if (!words.every(w => n.includes(' ' + w))) continue;
+    const [s, name, price, size, qty, u, url, deal, pay, minq] = P.items[i];
+    const dealOk = deal && pay != null && (minq <= 1 || S.cmulti);
+    const each = dealOk ? pay : price;
+    if (each == null) continue;
+    const r = {store: P.stores[s], name, price, size, qty, unit: P.units[u] || '', deal: dealOk ? deal : '',
+               pay: dealOk ? pay : null, minq: dealOk ? minq : 1, each,
+               url: !url ? '' : url.startsWith('http') ? url : (P.prefixes[s] || '') + url};
+    if (qty && r.unit) { r.up = each / qty; (groups[r.unit] ||= []).push(r); }
+    else noUnit.push(r);
+  }
+  const out = Object.entries(groups).sort((a, b) => b[1].length - a[1].length).map(([unit, rows]) => {
+    rows.sort((a, b) => a.up - b.up);
+    return {unit, total: rows.length, rows: S.cper ? onePerStore(rows) : rows};
+  });
+  if (noUnit.length) {
+    noUnit.sort((a, b) => a.each - b.each);
+    out.push({unit: '', total: noUnit.length, rows: S.cper ? onePerStore(noUnit) : noUnit});
+  }
+  return out;
+}
+function onePerStore(rows){ const seen = new Set(); return rows.filter(r => !seen.has(r.store) && seen.add(r.store)); }
+function cheapRow(r, i, unit){
+  const multi = r.deal && r.minq > 1;
+  const short = UNIT_SHORT[unit] || '';
+  const dealLine = r.deal ? `<div class="dl${multi ? ' multi' : ''}">${esc(r.deal)}${multi
+      ? ` · alleen bij ${r.minq} stuks (samen ${eur(r.pay * r.minq)})` : ''}</div>` : '';
+  const priceLine = r.deal && r.price && r.pay < r.price
+      ? `<span class="was">${eur(r.price)}</span> ${eur(r.pay)}${multi ? ' p/st' : ''}` : eur(r.each);
+  return `<a class="prow${i === 0 ? ' top' : ''}" href="${esc(r.url)}" target="_blank" rel="noopener">
+    <span class="rk">${i + 1}</span>
+    <span><div class="st">${esc(r.store)}</div><div class="nm">${esc(r.name)}</div>
+      ${r.size && !r.name.toLowerCase().includes(r.size.toLowerCase()) ? `<div class="size">${esc(r.size)}</div>` : ''}${dealLine}</span>
+    <span><div class="up">${unit ? eur(r.up) + '<span class="per">/' + short + '</span>' : eur(r.each)}</div>
+      <div class="pp">${priceLine}</div></span>
+  </a>`;
+}
+function renderCheap(){
+  const others = Object.keys(DATA.stores).filter(s => !(P && P.regular.includes(s)));
+  $('cnote').innerHTML = P
+    ? `Gewone prijzen van <a href="https://www.checkjebon.nl" target="_blank" rel="noopener">Checkjebon.nl</a> (dagelijks bijgewerkt) voor ${esc(P.regular.join(', '))}, plus de aanbiedingen van deze week.`
+      + (others.length ? ` Van ${esc(others.join(', '))} alleen de aanbiedingen.` : '')
+      + ' Prijzen kunnen per filiaal verschillen.'
+    : '';
+  if (!P) {
+    loadPrices();
+    $('grid').innerHTML = `<div class="loading">${pFailed
+      ? 'De prijslijst is niet beschikbaar. Hij wordt gemaakt bij de dagelijkse update.'
+      : 'Prijzen van ruim 100.000 producten laden…'}</div>`;
+    $('sub').textContent = '';
+    return;
+  }
+  const res = cheapResults();
+  if (!res) {
+    $('grid').innerHTML = `<div class="empty">Typ wat je nodig hebt, bijvoorbeeld <b>toiletpapier</b>, <b>pindakaas</b> of <b>cola zero</b>.<br>
+      Je ziet dan waar het het goedkoopst is, per kilo, liter, rol of wasbeurt, met de aanbiedingen van deze week meegerekend.</div>`;
+    $('sub').textContent = `${P.items.length.toLocaleString('nl-NL')} producten bij ${P.stores.length} winkels`;
+    return;
+  }
+  const total = res.reduce((n, g) => n + g.total, 0);
+  $('sub').textContent = `${total} producten gevonden voor "${S.cq}"`;
+  if (!total) { $('grid').innerHTML = '<div class="empty">Niets gevonden. Probeer een ander of korter woord.</div>'; return; }
+  $('grid').innerHTML = res.map(g => `
+    <div class="grp">${g.unit ? 'Goedkoopst ' + UNIT_LABEL[g.unit] : 'Zonder maat (op prijs)'}<span>${g.total} producten${S.cper ? ' · beste per winkel' : ''}</span></div>
+    ${g.rows.slice(0, S.cper ? 30 : 60).map((r, i) => cheapRow(r, i, g.unit)).join('')}`).join('');
+}
+
 function confirmClear(){ try { return window.confirm('Alle bewaarde producten wissen?'); } catch(e){ return true; } }
 
 // ---------- warnings
@@ -384,6 +515,10 @@ $('theme').onclick = () => { theme = theme === 'dark' ? 'light' : 'dark'; store.
 let typing;
 $('q').addEventListener('input', () => { clearTimeout(typing); typing = setTimeout(() => { S.q = $('q').value; render(); }, 150); });
 $('type').onchange = () => { S.type = $('type').value; render(); };
+let ctyping;
+$('cq').addEventListener('input', () => { clearTimeout(ctyping); ctyping = setTimeout(() => { S.cq = $('cq').value; render(); }, 200); });
+$('cmulti').onchange = () => { S.cmulti = $('cmulti').checked; render(); };
+$('cper').onchange = () => { S.cper = $('cper').checked; render(); };
 $('sort').onchange = () => { S.sort = $('sort').value; render(); };
 $('min').onchange = () => { S.min = +$('min').value; render(); };
 $('cmp').onchange = () => { S.cmp = $('cmp').checked; render(); };

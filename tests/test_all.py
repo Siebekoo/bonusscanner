@@ -127,6 +127,72 @@ def test_page_in_browser():
         b.close()
     assert not errors, errors
 
+FAKE_PRICES = [
+    {"n": "jumbo", "u": "https://www.jumbo.com/producten/", "d": [
+        {"n": "Jumbo Toiletpapier 2-laags 24 Stuks", "l": "tp", "p": 6.19, "s": ""},
+        {"n": "Page Kussenzacht Toiletpapier 3-laags 9 rollen", "l": "page9", "p": 7.49, "s": ""},
+        {"n": "Jumbo Vochtig Toiletpapier 80 Stuks", "l": "wet", "p": 0.94, "s": ""}]},
+    {"n": "hoogvliet", "u": "https://www.hoogvliet.com/product/", "d": [
+        {"n": "G'woon Toiletpapier", "l": "gw", "p": 6.25, "s": "24 rollen"},
+        {"n": "Finish all in one vaatwastabletten", "l": "fin", "p": 12.99, "s": "54 tabs"}]},
+    {"n": "plus", "u": "https://www.plus.nl/product/", "d": [
+        {"n": "PLUS Toiletpapier 2-laags", "l": "p2", "p": 6.99, "s": "per 24 st"},
+        {"n": "PLUS Toiletpapier 3-laags 16 rollen", "l": "p3", "p": 5.19, "s": ""}]},
+]
+
+def test_price_units():
+    from scanner.prices import amount_for
+    assert amount_for("AH Toiletpapier 2-laags 16=24 rollen", "") == (24.0, "rol")
+    assert amount_for("Jumbo Vochtig Toiletpapier 80 Stuks", "") == (80.0, "doekje")
+    assert amount_for("Finish all in one vaatwastabletten", "54 tabs") == (54.0, "tablet")
+    assert amount_for("Ariel wasmiddel", "40 wasbeurten") == (40.0, "wasbeurt")
+    assert amount_for("Page toiletpapier 6-rollen", "") == (6.0, "rol")
+    assert amount_for("PLUS rosti", "Per 350 g") == (0.35, "kg")
+    assert amount_for("Spar wijn", "187 Milliliter") == (0.187, "l")
+    assert amount_for("Cola zero", "6 x 330 ml") == (1.98, "l")
+
+def test_prices_with_deals():
+    from scanner import prices
+    from scanner.models import Deal
+    from scanner.enrich import enrich
+    from datetime import date
+    deals = enrich([d.finalize() for d in [
+        Deal(store="Jumbo", title="Page Toiletpapier Kussenzacht 3-laags 9 rollen", deal_text="1+1 gratis", price_now=7.49),
+        Deal(store="PLUS", title="PLUS Toiletpapier 3-laags", size="16 rollen", deal_text="25% korting",
+             price_now=3.89, price_was=5.19),
+        Deal(store="Etos", title="Etos toiletpapier 24 rollen", deal_text="1+1 gratis", price_now=9.99)]],
+        date(2026, 11, 17))
+    p = prices.build(FAKE_PRICES, deals)
+    rows = {r[1]: r for r in p["items"]}
+    page = rows["Page Kussenzacht Toiletpapier 3-laags 9 rollen"]
+    assert (page[7], page[8], page[9]) == ("1+1 gratis", 3.75, 2)          # deal on the right pack
+    assert rows["PLUS Toiletpapier 3-laags 16 rollen"][8] == 3.89           # 3-laags, not 2-laags
+    assert rows["PLUS Toiletpapier 2-laags"][7] == ""
+    assert "Etos toiletpapier 24 rollen" in rows                            # store without a price list
+    assert p["stores"][rows["Etos toiletpapier 24 rollen"][0]] == "Etos"
+
+def test_cheapest_tab_in_browser():
+    from scanner import prices
+    from playwright.sync_api import sync_playwright
+    folder = Path(tempfile.mkdtemp())
+    write_html({"generated": "2026-11-17T06:10", "stores": {"Jumbo": {"count": 0}}, "warnings": [],
+                "deals": []}, folder / "deals.html")
+    prices.write_js(prices.build(FAKE_PRICES, []), folder / "prices.js")
+    errors = []
+    with sync_playwright() as p:
+        b = browser._launch(p, headful=False)
+        pg = b.new_page()
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        pg.goto((folder / "deals.html").as_uri() + "#t=cheap&cq=toiletpapier")
+        pg.wait_for_selector(".prow", timeout=10000)
+        groups = pg.locator(".grp").all_inner_texts()
+        assert groups[0].startswith("Goedkoopst per rol"), groups
+        first = pg.locator(".prow").first.inner_text()
+        assert "Jumbo Toiletpapier 2-laags" in first and "0,26" in first, first
+        assert any("per doekje" in g for g in groups)        # wipes kept apart
+        b.close()
+    assert not errors, errors
+
 def _serve():
     h = functools.partial(http.server.SimpleHTTPRequestHandler,
                           directory=str(Path(__file__).parent / "site"))

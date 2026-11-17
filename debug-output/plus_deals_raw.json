@@ -1,0 +1,598 @@
+[
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Handappels Jonagold",
+   "price_was": 1.49,
+   "size": "1000 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/113840_M/9a48ad3483014ca249bac914ef94a22a/113840.png",
+   "url": "https://www.plus.nl/product/plus-handappels-jonagold-kg-1000-g-113840",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Handperen Conference",
+   "price_was": 1.99,
+   "size": "1 kg",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/520683_M/045d843afca96fffc616dc5f31380ae9/520683.png",
+   "url": "https://www.plus.nl/product/plus-handperen-conference-schaal-1-kg-520683",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Mandarijnen extra groot GVP",
+   "deal_text": "voordeelverpakking",
+   "price_now": 3.49,
+   "price_was": 4.49,
+   "size": "1500 g",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/796552_M/212cb4bed457dd6932cc2d260ed1ec7c/796552.png",
+   "url": "https://www.plus.nl/product/plus-mandarijnen-extra-groot-gvp-net-1500-g-796552",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Mango",
+   "price_was": 1.99,
+   "size": "1 st",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/852877_M/5c65c551147985664e686f2d84f84a2b/852877.png",
+   "url": "https://www.plus.nl/product/plus-mango-stuk-1-st-852877",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Witte en Sable druiven",
+   "price_now": 1.99,
+   "price_was": 2.99,
+   "size": "Per schaal",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_209_M/ae0a646a22be7a2e07f3301e253b6849/4455_209.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-209",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Opbakaardappels",
+   "price_was": 1.39,
+   "size": "Per zak",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_194_M/4a1e75535b60786fab324fccc2b70467/4455_194.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-194",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Avocado",
+   "price_now": 0.99,
+   "price_was": 1.49,
+   "size": "1 st",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/782069_M/30cb0aa5da62df4192762b488af37a7e/782069.png",
+   "url": "https://www.plus.nl/product/plus-avocado-stuk-1-st-782069",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Courgette groen",
+   "deal_text": "2 voor €1,00",
+   "price_was": 0.89,
+   "size": "1 st",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/114068_M/e441ac6cb5992d10373c236807f46ec7/114068.png",
+   "url": "https://www.plus.nl/product/plus-courgette-groen-stuk-1-st-114068",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Kies & Mix Snoepgroente",
+   "deal_text": "3 voor €5,00",
+   "price_now": 1.67,
+   "price_was": 2.19,
+   "size": "3 schalen",
+   "valid_from": "2026-09-30",
+   "valid_until": "2026-11-24",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4449_13_M/976a23e78c5ebc0df5dd5dcfb566b40f/4449_13.png",
+   "url": "https://www.plus.nl/aanbiedingen/4449-13",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Kies & Mix Vers gesneden fruit",
+   "deal_text": "3 voor €5,00",
+   "price_now": 1.67,
+   "price_was": 2.49,
+   "size": "3 schalen",
+   "valid_from": "2026-09-30",
+   "valid_until": "2026-11-24",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4449_5_M/de324d7695d71a05e44c8cfef44ebe3b/4449_5.png",
+   "url": "https://www.plus.nl/aanbiedingen/4449-5",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Ijsbergsla",
+   "price_was": 1.09,
+   "size": "Per zak",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_200_M/2fd97cd428173ef1674cbe65dd588ccf/4455_200.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-200",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Spruiten",
+   "price_was": 2.19,
+   "size": "750 g",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/188088_M/440ce06a3d100136d91bc7bd80ac0f29/188088.png",
+   "url": "https://www.plus.nl/product/plus-spruiten-zak-750-g-188088",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Kookgroenten",
+   "price_was": 1.09,
+   "size": "Per zak",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_195_M/dc6dcd8581e17ded846ab540760dc098/4455_195.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-195",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Worteltjes en snackworteltjes",
+   "price_was": 1.29,
+   "size": "Per zak",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_196_M/edddeec99c8ec9c7e9f4849fe8cf5cf2/4455_196.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-196",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Biologisch PLUS Wortelen",
+   "price_now": 1.49,
+   "price_was": 1.85,
+   "size": "1 kg",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/378422_M/b274b98f56213d26edaa74378e68b3f1/378422.png",
+   "url": "https://www.plus.nl/product/biologisch-plus-wortelen-zak-1-kg-378422",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Biologisch PLUS Rode bieten",
+   "price_now": 0.99,
+   "price_was": 1.49,
+   "size": "500 g",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/516970_M/2b3556574b214cbaa5484aba15315149/516970.png",
+   "url": "https://www.plus.nl/product/biologisch-plus-rode-bieten-krimp-500-g-516970",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Prei",
+   "deal_text": "2 voor €1,00",
+   "price_was": 0.55,
+   "size": "1 st",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/449412_M/66a0f6674f2215d7687fd649d3e2c597/449412.png",
+   "url": "https://www.plus.nl/product/plus-prei-stuk-1-st-449412",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Alles in één groenten",
+   "price_now": 1.99,
+   "price_was": 3.49,
+   "size": "Per zak",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_206_M/f3722f3e3cbe527faf613fa92fd17304/4455_206.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-206",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Verspakket",
+   "price_now": 4.99,
+   "price_was": 5.69,
+   "size": "Per stuk",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_203_M/9ff9cdbb2d94bc4c6b11edb999f19d26/4455_203.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-203",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS en Innocent Shots",
+   "price_was": 1.09,
+   "size": "Per fles",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_13_M/4664a2dcf9e183f75d37f9889db0a337/4455_13.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-13",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Stamppot 2-vaks",
+   "price_now": 3.99,
+   "price_was": 4.49,
+   "size": "Per schaal",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_83_M/93f56b9c59f8a698725abd57bea471f5/4455_83.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-83",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Flammkuchen- en bladerdeeg",
+   "price_was": 1.39,
+   "size": "Per pak",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_65_M/fa973d8905758c8063a1863d4e0d099f/4455_65.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-65",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Kies & Mix Oosterse maaltijd",
+   "deal_text": "2 voor €5,50",
+   "price_now": 2.75,
+   "price_was": 3.09,
+   "size": "2 schalen",
+   "valid_from": "2026-09-30",
+   "valid_until": "2026-11-24",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4449_20_M/e5aa81f530c63a8a7b1b04da8079e12e/4449_20.png",
+   "url": "https://www.plus.nl/aanbiedingen/4449-20",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Uit de keuken van PLUS Kies & Mix Shared dining",
+   "deal_text": "2 voor €7,50",
+   "price_now": 3.75,
+   "price_was": 3.99,
+   "size": "2 schalen",
+   "valid_from": "2026-09-30",
+   "valid_until": "2026-11-24",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4449_21_M/c673ad9dbff9f1409b1609334e52532d/4449_21.png",
+   "url": "https://www.plus.nl/aanbiedingen/4449-21",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Uit de keuken van PLUS Spaghetti meatball",
+   "deal_text": "450 gram voor €5,99",
+   "price_now": 5.99,
+   "price_was": 6.99,
+   "size": "450 gram",
+   "valid_from": "2026-11-01",
+   "valid_until": "2026-11-30",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/738568_M/294807d408edc1e412aaa00348628f10/738568.png",
+   "url": "https://www.plus.nl/product/uit-de-keuken-van-plus-spaghetti-meatball-kg-450-g-738568",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Uit de keuken van PLUS Salade Kip Italiaanse stijl",
+   "price_now": 5.49,
+   "price_was": 6.49,
+   "size": "445 g",
+   "valid_from": "2026-11-01",
+   "valid_until": "2026-11-30",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/184659_M/52b32936af44aae7ce22ef74c9538141/184659.png",
+   "url": "https://www.plus.nl/product/uit-de-keuken-van-plus-salade-kip-italiaanse-stijl-bakje-445-g-184659",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Uit de keuken van PLUS Pizza Funghi",
+   "price_now": 5.99,
+   "price_was": 6.99,
+   "size": "1 st",
+   "valid_from": "2026-11-01",
+   "valid_until": "2026-11-30",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/182767_M/020469e2dd9fa11984a4f88192fd73ed/182767.png",
+   "url": "https://www.plus.nl/product/uit-de-keuken-van-plus-pizza-funghi-stuk-1-st-182767",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Boerentrots Kipschnitzels en -haasjes",
+   "price_now": 4.99,
+   "price_was": 5.89,
+   "size": "Per schaal",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_62_M/27a60dab0dbeaa9a8445424613f51f19/4455_62.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-62",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Boerentrots Kipborrelhapjes en -kluifjes",
+   "price_now": 3.99,
+   "price_was": 4.79,
+   "size": "Per zak",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_61_M/4ce000e94afc51e4333dbb49b1bf900b/4455_61.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-61",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Blonde d'Aquitaine Runderhachee goulashvlees en runderriblappen",
+   "deal_text": "250 gram voor €4,49",
+   "price_now": 4.49,
+   "price_was": 4.78,
+   "size": "Per 250 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_123_M/14e8eb9fbb3f240fb9d2da18500f54d7/4455_123.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-123",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Boerentrots Varkensschnitzels",
+   "deal_text": "100 gram voor €1,00",
+   "price_was": 1.168,
+   "size": "Per 100 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_138_M/b913dc8208e88cd162d6e23deacedce6/4455_138.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-138",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Varkenshaas",
+   "deal_text": "75 gram voor €1,00",
+   "price_was": 1.008,
+   "size": "Per 75 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_137_M/011f5d8d43c0ddfd673579e00e14e091/4455_137.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-137",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Boerentrots Shoarma en Gyros",
+   "deal_text": "450 gram voor €3,49",
+   "price_now": 3.49,
+   "price_was": 4.455,
+   "size": "Per 450 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_158_M/69211df0a512a7afb44828d9ed05c0bc/4455_158.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-158",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Boerentrots Varkenssaucijzen",
+   "deal_text": "150 gram voor €1,00",
+   "price_was": 1.02,
+   "size": "Per 150 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_60_M/6ea3e005077a558d824c4123ed774cab/4455_60.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-60",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Zalmfilet met huid",
+   "deal_text": "250 gram voor €4,99",
+   "price_now": 4.99,
+   "size": "Per 250 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_134_M/1ec89ec2e412f8b016243ef895f23e30/4455_134.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-134",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Verse Pangasius",
+   "deal_text": "100 gram voor €1,00",
+   "size": "Per 100 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_133_M/12673c53da89c6c55dc26dc8fe478edb/4455_133.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-133",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Alle Gijs Gerookte forel en haring (Bijv. Forelfilet)",
+   "deal_text": "25% korting",
+   "price_now": 1.91,
+   "price_was": 2.55,
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_135_M/b7b38c4b856002b57752feee352b0e4a/4455_135.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-135",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "Alle PLUS Vleesvervangers (Bijv. Plantaardig rulgehakt)",
+   "deal_text": "25% korting",
+   "price_now": 1.16,
+   "price_was": 1.55,
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_132_M/0fa3f00c865cb5e3b95430d0759fcd34/4455_132.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-132",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "BIO+ Tofu",
+   "price_was": 1.25,
+   "size": "325 g",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/601449_M/9bc06f87d681ec85fbb3e5752ab0b15a/601449.png",
+   "url": "https://www.plus.nl/product/bio-tofu-zak-325-g-601449",
+   "week": "deze"
+  },
+  "raw": null
+ },
+ {
+  "found": {
+   "store": "PLUS",
+   "title": "PLUS Klaverland Stukken en plakken",
+   "deal_text": "100 gram voor €1,00",
+   "price_was": 1.649,
+   "size": "Per 100 gram",
+   "valid_from": "2026-11-11",
+   "valid_until": "2026-11-17",
+   "image": "https://images.ctfassets.net/s0lodsnpsezb/4455_116_M/d89ac1789975501372709511571c3938/4455_116.png",
+   "url": "https://www.plus.nl/aanbiedingen/4455-116",
+   "week": "deze"
+  },
+  "raw": null
+ }
+]

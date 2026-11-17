@@ -17,6 +17,13 @@ Makro into one page.
   "Was eerder €x". These appear once a few weeks of history exist.
 - **Deel**: copies a link that opens the page with your current filters.
 - **Dark mode** (🌙 button).
+- **🔍 Goedkoopst**: type what you need ("toiletpapier", "pindakaas", "wasmiddel") and see
+  where it's cheapest across all brands, per kilo / liter / roll / wash / diaper / egg, with
+  this week's deals included. Multi-buy deals (1+1) can be switched off if you only want one.
+  Regular prices come from [Checkjebon](https://www.checkjebon.nl) (MIT license, updated daily)
+  for AH, Jumbo, PLUS, Lidl, Dirk, Hoogvliet, DekaMarkt, Spar, Vomar and Poiesz. For Aldi,
+  Etos, Kruidvat, Action and others only their deals are included. Units for special product
+  types (toilet paper, detergent, ...) are defined in `scanner/prices.py` under `TYPES`.
 - **Warning bar** when a store returns 0 deals or far fewer than usual, which usually means
   its website changed and the scraper needs fixing.
 

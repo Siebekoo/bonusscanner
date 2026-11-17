@@ -23,7 +23,7 @@ from pathlib import Path
 from scanner.stores import STORES, run_store
 from scanner.report import write_html
 from scanner.enrich import enrich
-from scanner import history
+from scanner import history, prices
 
 ROOT = Path(__file__).parent
 
@@ -45,6 +45,8 @@ def main():
     ap.add_argument("--workers", type=int, default=4, help="stores scanned in parallel")
     ap.add_argument("--out", default=str(ROOT / "output"))
     ap.add_argument("--no-history", action="store_true", help="don't read or save price history")
+    ap.add_argument("--no-prices", action="store_true",
+                    help="skip the regular price list (the Goedkoopst tab)")
     ap.add_argument("--push", action="store_true",
                     help="upload results to GitHub (for stores that block GitHub's servers)")
     args = ap.parse_args()
@@ -135,6 +137,8 @@ def main():
     }
     (out / "deals.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1), "utf-8")
     write_html(payload, out / "deals.html")
+    if not args.no_prices and not args.push:
+        build_prices(all_deals, out)
     report_warnings(warnings, counts)
 
     print(f"\n{len(all_deals)} deals total")
@@ -146,6 +150,17 @@ def main():
     empty = [n for n, s in status.items() if not s["count"]]
     if empty:
         print(f"\nNo deals from: {', '.join(empty)}. Run with --debug --only <store> to see why.")
+
+
+def build_prices(deals, out):
+    """Regular prices of everything + this week's deals, for the Goedkoopst tab."""
+    data = prices.download(ROOT / "cache")
+    if not data:
+        return
+    p = prices.build(data, deals)
+    prices.write_js(p, out / "prices.js")
+    with_deal = sum(1 for r in p["items"] if r[7])
+    print(f"  Price list: {len(p['items'])} products, {with_deal} with a deal this week")
 
 
 PUSH_DIR = ROOT / "pushed"

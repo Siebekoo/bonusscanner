@@ -278,6 +278,12 @@ def test_plus_reader():
     assert c.url == "https://www.plus.nl/product/plus-courgette-groen-stuk-1-st-114068"
     assert deals["PLUS Handappels"].discount_pct == 33
 
+def test_page_that_reloads_itself():
+    """A page that replaces itself while we scroll must not crash the scan."""
+    srv = _serve(); base = f"http://127.0.0.1:{srv.server_port}"
+    deals = browser.fetch_page("Reload", base + "/shop_reload.html", max_scrolls=8)
+    assert len(deals) == 6, len(deals)          # the 6 products of shop_dom.html
+
 def test_report():
     out = Path(tempfile.mkdtemp()) / "x.html"
     write_html({"generated": "2026-11-15T15:00", "stores": {"A": {"ok": True, "count": 1}},

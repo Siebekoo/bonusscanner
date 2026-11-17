@@ -151,6 +151,34 @@ def test_browser_page_cards():
     nv = deals["Nivea babycreme"]          # Etos style: "van € 14.99 voor € 7.50"
     assert (nv.price_was, nv.price_now) == (14.99, 7.5) and nv.deal_text == "1+1gratis", nv
 
+def test_finds_moved_offers_page():
+    """Store URL is wrong: the scanner should find the offers page via the homepage."""
+    from scanner import stores
+    srv = _serve(); base = f"http://127.0.0.1:{srv.server_port}"
+    stores.STORES["test"] = {"name": "Testshop", "url": base + "/bestaat-niet", "cents": True}
+    try:
+        deals = stores.run_store("test", headful=True, offscreen=True) if _has_display() \
+            else _run_headless_discovery(base)
+    finally:
+        del stores.STORES["test"]
+    assert len(deals) == 18, len(deals)
+
+def _has_display():
+    import os
+    return bool(os.environ.get("DISPLAY")) or sys.platform in ("win32", "darwin")
+
+def _run_headless_discovery(base):
+    found = browser.discover_offer_urls(base + "/bestaat-niet")
+    assert found and found[0].endswith("/shop_json.html"), found
+    return browser.fetch_page("Testshop", found[0], cents=True)
+
+def test_implausible_discount():
+    from scanner.models import Deal
+    cheese = Deal(store="X", title="Jong belegen kaas", price_now=1.99, price_was=15.99).finalize()
+    assert cheese.price_was is None and cheese.discount_pct is None
+    real = Deal(store="X", title="Wasmiddel", deal_text="70% korting", price_now=3.0, price_was=10.0).finalize()
+    assert real.discount_pct == 70
+
 def test_report():
     out = Path(tempfile.mkdtemp()) / "x.html"
     write_html({"generated": "2026-11-15T15:00", "stores": {"A": {"ok": True, "count": 1}},

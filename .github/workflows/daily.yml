@@ -2,9 +2,15 @@
 name: Daily deals
 
 on:
+  # Main trigger: cron-job.org starts this every morning at 06:00 via "Run workflow"
+  # (see README). GitHub's own schedule below is only a backup: it often starts hours late,
+  # and it skips itself when today's update already happened.
   schedule:
-    - cron: "15 5 * * *"     # 05:15 UTC = 06:15 in winter, 07:15 in summer (NL time)
+    - cron: "15 5 * * *"     # 06:15 in winter, 07:15 in summer (NL time)
+    - cron: "45 6 * * *"     # 07:45 / 08:45
   workflow_dispatch:          # adds a "Run workflow" button for running it by hand
+  push:
+    paths: ["pushed/**"]      # your PC uploaded new deals: rebuild the site
 
 permissions:
   contents: write     # to save the daily price history back into the repository
@@ -25,12 +31,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Scheduled (backup) runs only do something if today's update didn't happen yet.
+      - name: Already updated today?
+        if: github.event_name == 'schedule'
+        run: |
+          if [ -f "history/$(TZ=Europe/Amsterdam date +%F).json.gz" ]; then
+            echo "Already updated today, nothing to do."
+            echo "SKIP=1" >> "$GITHUB_ENV"
+          fi
+
       - uses: actions/setup-python@v5
+        if: env.SKIP != '1'
         with:
           python-version: "3.12"
           cache: pip
 
       - name: Install
+        if: env.SKIP != '1'
         run: |
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
@@ -38,12 +55,14 @@ jobs:
       # xvfb gives the "retry with a normal browser window" step a virtual screen.
       # If no store returns anything, scan.py fails and yesterday's page stays online.
       - name: Scan stores
+        if: env.SKIP != '1'
         run: xvfb-run -a python scan.py
 
       # Keeps a small file per day in history/ so the page can show
       # "Beste prijs in 8 weken" etc. The daily commit should also count as activity,
       # so GitHub is less likely to switch off the schedule after 60 days.
       - name: Save price history
+        if: env.SKIP != '1'
         run: |
           git config user.name "bonusscanner-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -53,11 +72,14 @@ jobs:
           git push
 
       - name: Prepare site
+        if: env.SKIP != '1'
         run: cp output/deals.html output/index.html
 
       - uses: actions/upload-pages-artifact@v3
+        if: env.SKIP != '1'
         with:
           path: output
 
       - id: deploy
+        if: env.SKIP != '1'
         uses: actions/deploy-pages@v4

@@ -42,10 +42,22 @@ class Deal:
         if self.price_was is not None:
             self.price_was = round(float(self.price_was), 2)
 
+        # "€1,00 korting" with only the normal price known: work out the deal price
+        off = re.search(r"€?\s*(\d+[.,]\d{2})\s*korting", (self.deal_text or "").lower())
+        if off and self.price_now and not self.price_was:
+            amount = _num(off.group(1))
+            if amount < self.price_now:
+                self.price_was, self.price_now = self.price_now, round(self.price_now - amount, 2)
         qty, pct = classify(self.deal_text, self.price_was or self.price_now)
         price_pct = None
         if self.price_now and self.price_was and self.price_was > self.price_now:
             price_pct = round((1 - self.price_now / self.price_was) * 100)
+            claimed = [int(x) for x in re.findall(r"(\d{2})\s*%", self.deal_text or "")]
+            if price_pct >= 70 and not (claimed and max(claimed) >= 60):
+                # e.g. -88% on cheese: the "old price" was really a price per kilo.
+                # Don't trust it unless the shop itself says it's 60%+ off.
+                self.price_was, price_pct = None, None
+                qty, pct = classify(self.deal_text, self.price_now)
 
         if qty > 1:
             # Multi-buy: no discount on a single item. Prices shown by shops for these are
@@ -94,15 +106,15 @@ def classify(text: str, unit_price: Optional[float] = None) -> tuple[int, Option
         if 0 < pay + free <= 20:
             return pay + free, round(free / (pay + free) * 100)
 
-    m = re.search(r"(\d+)\s*e\s*(?:artikel|stuk|product)?\s*halve\s*prijs", t)
+    m = re.search(r"(\d+)\s*e\s*(?:artikel|stuk|product|fles|pak|verpakking|krat|doos|blik)?\s*halve\s*prijs", t)
     if m or "tweede halve prijs" in t:
         n = int(m.group(1)) if m else 2
         return n, round(50 / n)
-    m = re.search(r"(\d+)\s*e\s*(?:artikel|stuk|product)?\s*gratis", t)
+    m = re.search(r"(\d+)\s*e\s*(?:artikel|stuk|product|fles|pak|verpakking|krat|doos|blik)?\s*gratis", t)
     if m:
         n = int(m.group(1))
         return n, round(100 / n)
-    m = re.search(r"(\d+)\s*e\s*(?:artikel|stuk|product)?\s*(\d{1,2})\s*%", t)
+    m = re.search(r"(\d+)\s*e\s*(?:artikel|stuk|product|fles|pak|verpakking|krat|doos|blik)?\s*(\d{1,2})\s*%", t)
     if m:
         n, p = int(m.group(1)), int(m.group(2))
         return n, round(p / n)
@@ -117,6 +129,11 @@ def classify(text: str, unit_price: Optional[float] = None) -> tuple[int, Option
         if unit_price and unit_price * n > total:
             pct = round((1 - total / (unit_price * n)) * 100)
         return n, pct
+
+    m = re.search(r"€?\s*(\d+[.,]\d{2})\s*korting", t)              # "€1,00 korting"
+    if m:
+        off = _num(m.group(1))
+        return 1, round(off / unit_price * 100) if unit_price and unit_price > off else None
 
     m = re.search(r"(?:bij|vanaf|per)\s*(\d+)\s*(?:stuks?|st\.?|artikelen)", t)   # "25% bij 2 stuks"
     pct_m = re.search(r"(\d{1,2})\s*%", t)

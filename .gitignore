@@ -2,3 +2,5 @@ output/
 debug/
 .venv/
 __pycache__/
+history-local/
+pc_run.log

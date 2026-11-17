@@ -27,6 +27,8 @@ def is_junk(d: Deal) -> bool:
         return True
     if d.price_now is None and not d.deal_text:
         return True
+    if d.price_now is None and len(t.split()) == 1:
+        return True          # e.g. Gall & Gall's "Chili" / "Frankrijk" wine tiles, "box" icons
     if d.price_now and d.price_now > 1500:
         return True
     return False

@@ -1,7 +1,7 @@
 # Bonusscanner
 
 Collects this week's (and next week's) deals from Albert Heijn, Jumbo, Hoogvliet, Etos,
-Kruidvat, Dirk, Aldi, Lidl, PLUS, Vomar, DekaMarkt, Coop, Spar, Action, Gall & Gall and
+Kruidvat, Dirk, Aldi, Lidl, PLUS, Vomar, DekaMarkt, Spar, Action, Gall & Gall and
 Makro into one page.
 
 ## What the page does
@@ -77,12 +77,14 @@ Store websites change regularly, so this will happen sometimes.
 1. `python scan.py --debug --only <store>`
 2. Check `debug/<store>.png`. Is it the correct offers page, or is there a cookie wall or captcha?
 3. If the offers page moved, update the URL in `scanner/stores.py`.
-4. `debug/<store>_responses.json` contains all data the page loaded. If the deals are there
+4. `debug/<store>_deals_raw.json` shows the first 40 deals found plus the raw data each
+   came from. Send this file when asking for help with a store.
+5. `debug/<store>_responses.json` contains all data the page loaded. If the deals are there
    but not picked up, add the field names to the lists at the top of `scanner/extract.py`.
 
 ## Known limitations
 
-- **Vomar, DekaMarkt, Coop, Spar and Gall & Gall** were added with their likely offers
+- **Vomar, DekaMarkt, Spar and Gall & Gall** were added with their likely offers
   addresses, which could not be tested. If one stays at 0, fix its URL in `scanner/stores.py`.
   Spar applies many deals only in the shopping cart, so it may find little.
 - **Categories** come from keywords in the product name. Some products will land in
@@ -119,6 +121,26 @@ publish the page at `https://<your-github-name>.github.io/bonusscanner/`.
    It takes about 5 minutes. After that it runs by itself every morning.
 5. Share the link from Settings → Pages with your friends.
 
+### Make the morning run start on time (recommended)
+
+GitHub's own schedule is unreliable for free projects: runs often start hours late. A free
+service like cron-job.org can start the run at an exact time instead:
+
+1. **Make a token on GitHub.** Click your profile picture → **Settings** → **Developer settings**
+   → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**.
+   Name: `cron-job`. Expiration: the longest offered. Repository access: **Only select
+   repositories** → `bonusscanner`. Permissions → Repository permissions → **Actions: Read and
+   write**. Click **Generate token** and copy it. You'll only see it once.
+2. **Create a job on cron-job.org.** Make a free account, click **Create cronjob**, and fill in:
+   - URL: `https://api.github.com/repos/<your-github-name>/bonusscanner/actions/workflows/daily.yml/dispatches`
+   - Schedule: every day at **06:00**, time zone **Europe/Amsterdam**
+   - Under **Advanced**: Request method **POST**; Headers:
+     `Authorization` = `Bearer <your token>`, `Accept` = `application/vnd.github+json`,
+     `X-GitHub-Api-Version` = `2022-11-28`; Request body: `{"ref":"main"}`
+3. Click **Test run**. It should answer **204**, and a new run appears under Actions.
+
+When the token expires, GitHub emails you. Make a new one and paste it into the cron-job.
+
 Notes:
 - GitHub's servers are not in the Netherlands. Some stores may block them, even if those
   stores work from your own PC. Check the store chips on the page: dashed ones failed.
@@ -126,7 +148,26 @@ Notes:
   60 days. The daily history commit should count as activity. If GitHub emails you that the
   workflow will be disabled, click the link in that email to keep it running.
 
-## Run it on your own PC instead
+## Stores that block GitHub (Etos, Spar, Vomar): let your PC fill the gaps
+
+Some stores block GitHub's servers but work fine from your own PC. Your PC can scan those
+stores every morning and upload the results. The online page then uses them (for up to 3
+days old) for any store that's blocked online, and rebuilds as soon as your PC uploads.
+
+One-time setup on Windows:
+1. Double-click `run_on_pc.bat` once. If a GitHub sign-in window appears, sign in. After a
+   minute or two, a commit "Deals from PC ..." should appear on GitHub, and `pc_run.log`
+   shows what happened.
+2. Double-click `setup_pc_task.bat`. Windows will now run `run_on_pc.bat` every morning at
+   05:45, or as soon as your PC is on if it was off at that time.
+
+To change which stores your PC scans, edit the `--only etos,spar,vomar` part of
+`run_on_pc.bat`. To stop: open Task Scheduler and delete the task "Bonusscanner".
+
+Local runs keep their own price history in `history-local/` (not uploaded), so it never
+clashes with the history GitHub keeps in `history/`.
+
+## Run the whole scan on your own PC
 
 This only updates the copy on your PC.
 

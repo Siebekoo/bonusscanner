@@ -314,7 +314,10 @@ def _scroll_all(page, max_scrolls):
     last_h = 0
     still = 0
     for _ in range(max_scrolls):
-        page.mouse.wheel(0, 2500)
+        try:
+            page.mouse.wheel(0, 2500)
+        except Exception:
+            pass
         page.wait_for_timeout(700)
         try:
             more = page.get_by_role("button", name=MORE_BUTTON)
@@ -323,7 +326,12 @@ def _scroll_all(page, max_scrolls):
                 page.wait_for_timeout(1500)
         except Exception:
             pass
-        h = page.evaluate("document.body.scrollHeight")
+        try:
+            # the page may be reloading itself (e.g. after a bot check) and have no body yet
+            h = page.evaluate("(document.scrollingElement || document.documentElement || {}).scrollHeight || 0")
+        except Exception:
+            page.wait_for_timeout(1500)
+            continue
         still = still + 1 if h == last_h else 0
         if still >= 3:
             break

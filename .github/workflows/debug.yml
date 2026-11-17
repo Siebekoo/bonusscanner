@@ -1,0 +1,33 @@
+# Temporary: runs the scanner in debug mode on GitHub and saves the debug files into this
+# branch, so they can be inspected. Triggered by pushing to the debug-run branch.
+name: Debug run
+on:
+  push:
+    branches: [debug-run]
+    paths: [".github/workflows/debug.yml"]
+permissions:
+  contents: write
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12", cache: pip}
+      - run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+      - run: xvfb-run -a python scan.py --debug --only plus,gall,etos --no-history --no-prices || true
+      - name: Save debug files to this branch
+        run: |
+          mkdir -p debug-output
+          cp debug/*.png debug/*_deals_raw.json debug/*_cards.json debug-output/ 2>/dev/null || true
+          for f in debug/*_responses.json; do
+            # keep big files manageable
+            head -c 15000000 "$f" | gzip > "debug-output/$(basename "$f").gz"
+          done
+          git config user.name "bonusscanner-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add debug-output
+          git commit -m "Debug output" && git push

@@ -18,9 +18,10 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
       - run: xvfb-run -a python scan.py --debug --only jumbo,hoogvliet,aldi,lidl,kruidvat --no-history --no-prices || true
-      - run: xvfb-run -a python tools/check_links.py
+      - run: PYTHONPATH=. xvfb-run -a python tools/check_links.py
       - run: |
           git config user.name "bonusscanner-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add debug-output && git commit -m "Link check output" && git push
 # run 2
+# run 3

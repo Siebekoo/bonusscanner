@@ -1,0 +1,131 @@
+{
+ "raw": {},
+ "search": {
+  "Jumbo": [
+   {
+    "url": "https://www.jumbo.com/producten/?searchType=keyword&searchTerms=pindakaas",
+    "status": 200,
+    "final": "https://www.jumbo.com/producten/?searchType=keyword&searchTerms=pindakaas",
+    "title": "Pindakaas kopen & bestellen | Jumbo",
+    "term_hits": 30,
+    "notfound": false
+   },
+   {
+    "url": "https://www.jumbo.com/zoeken?searchTerms=pindakaas",
+    "status": 404,
+    "final": "https://www.jumbo.com/zoeken?searchTerms=pindakaas",
+    "title": "404 - Altijd lage prijzen op je dagelijkse boodschappen | Jumbo Supermarkten",
+    "term_hits": 0,
+    "notfound": true
+   },
+   {
+    "url": "https://www.jumbo.com/producten/?searchTerms=pindakaas",
+    "status": 200,
+    "final": "https://www.jumbo.com/producten/?searchTerms=pindakaas",
+    "title": "pindakaas kopen & bestellen | Jumbo",
+    "term_hits": 2,
+    "notfound": false
+   }
+  ],
+  "Jumbo-promo": [
+   {
+    "url": "https://www.jumbo.com/aanbiedingen/jumbo-tofu-of-tempeh-naturel/3022380",
+    "status": 200,
+    "final": "https://www.jumbo.com/aanbiedingen/jumbo-tofu-of-tempeh-naturel/3022380",
+    "title": "Jumbo tofu of tempeh naturel | Aanbiedingen | Jumbo",
+    "term_hits": 4,
+    "notfound": false
+   },
+   {
+    "url": "https://www.jumbo.com/aanbiedingen/3022380",
+    "status": 200,
+    "final": "https://www.jumbo.com/aanbiedingen/nu",
+    "title": "Aanbiedingen | Nu in de aanbieding | Jumbo",
+    "term_hits": 1,
+    "notfound": false
+   }
+  ],
+  "Lidl": [
+   {
+    "url": "https://www.lidl.nl/q/search?q=pindakaas",
+    "status": 200,
+    "final": "https://www.lidl.nl/q/search?q=pindakaas",
+    "title": "Zoekresultaten voor lidl.nl voor: pindakaas",
+    "term_hits": 0,
+    "notfound": true
+   }
+  ],
+  "Lidl-product": [
+   {
+    "url": "https://www.lidl.nl/p/mango/p11029883",
+    "status": 200,
+    "final": "https://www.lidl.nl/p/mango/p11029883",
+    "title": "Mango | Lidl",
+    "term_hits": 2,
+    "notfound": false
+   },
+   {
+    "url": "https://www.lidl.nl/p/p11029883",
+    "status": 200,
+    "final": "https://www.lidl.nl/p/mango/p11029883",
+    "title": "Mango | Lidl",
+    "term_hits": 2,
+    "notfound": false
+   }
+  ],
+  "PLUS": [
+   {
+    "url": "https://www.plus.nl/zoekresultaten?SearchTerm=pindakaas",
+    "status": 200,
+    "final": "https://www.plus.nl/zoekresultaten?SearchTerm=pindakaas",
+    "title": "Zoekresultaten | PLUS",
+    "term_hits": 13,
+    "notfound": false
+   }
+  ],
+  "Hoogvliet": [
+   {
+    "url": "https://www.hoogvliet.com/search?query=pindakaas",
+    "status": 200,
+    "final": "https://hoogvliet.nl/search?query=pindakaas",
+    "title": "Alle Producten",
+    "term_hits": 0,
+    "notfound": true
+   },
+   {
+    "url": "https://hoogvliet.nl/search?query=pindakaas",
+    "status": 200,
+    "final": "https://hoogvliet.nl/search?query=pindakaas",
+    "title": "Alle Producten",
+    "term_hits": 0,
+    "notfound": true
+   }
+  ],
+  "Spar": [
+   {
+    "url": "https://www.spar.nl/zoekresultaten/?q=pindakaas",
+    "status": 404,
+    "final": "https://www.spar.nl/zoekresultaten/?q=pindakaas",
+    "title": "SPAR | oeps, ben je verdwaald? zie je door de sparren het bos niet meer?",
+    "term_hits": 0,
+    "notfound": false
+   },
+   {
+    "url": "https://www.spar.nl/zoeken/pindakaas/",
+    "status": 404,
+    "final": "https://www.spar.nl/zoeken/pindakaas/",
+    "title": "SPAR | oeps, ben je verdwaald? zie je door de sparren het bos niet meer?",
+    "term_hits": 0,
+    "notfound": false
+   },
+   {
+    "url": "https://www.spar.nl/producten/?q=pindakaas",
+    "status": 404,
+    "final": "https://www.spar.nl/producten/?q=pindakaas",
+    "title": "SPAR | oeps, ben je verdwaald? zie je door de sparren het bos niet meer?",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ]
+ }
+}

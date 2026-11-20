@@ -16,7 +16,8 @@ JUNK = re.compile(
     r"^(bekijk|meer info|lees meer|toon|ontdek|klik|bestel|ga naar|schrijf je in|download)|"
     r"nieuwsbrief|cadeaukaart|cadeaubon|gratis bezorg|bezorgkosten|folder|"
     r"^aanbiedingen?$|^acties?$|^bonus$|^alle aanbiedingen|cookie|inloggen|"
-    r"^(deze|volgende) week$|^weekactie$|spaaractie|spaarkaart|winactie", re.I)
+    r"^(deze|volgende) week$|^weekactie$|spaaractie|spaarkaart|winactie|"
+    r"winkelmand|banner|voucher|freemium|\{\{|toegevoegd aan|verwijderd uit|^mijn ", re.I)
 
 
 def is_junk(d: Deal) -> bool:

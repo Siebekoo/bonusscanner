@@ -1,0 +1,626 @@
+{
+ "raw": {
+  "lidl_deals_raw": [
+   {
+    "found_url": "",
+    "raw_keys": [
+     "category",
+     "id",
+     "name",
+     "position",
+     "price",
+     "sponsored",
+     "listId",
+     "listName",
+     "type",
+     "gridBoxType",
+     "categoryPrimary",
+     "wonCategoryPrimary",
+     "wonCategoryPrimaryPath",
+     "tradeType",
+     "creativeName",
+     "promotionName",
+     "promotionId",
+     "hasColors"
+    ],
+    "raw": "{\"category\": \"F+V\", \"id\": \"11029883\", \"name\": \"Mango\", \"position\": \"2.3\", \"price\": 0.99, \"sponsored\": false, \"listId\": 10008785, \"listName\": \"Aanbiedingen\", \"type\": \"p_pdp\", \"gridBoxType\": \"default\", \"categoryPrimary\": \"F+V\", \"wonCategoryPrimary\": \"Werelden van nood/Eten en dichtbij voedsel/Groenten & fruit/Fruit\", \"wonCategoryPrimaryPath\": \"0/17/1710/171010\", \"tradeType\": \"retail\", \"creativeName\": 11029883, \"promotionName\": \"Aanbiedingen\", \"promotionId\": 10008785, \"hasColors\": false}"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "category",
+     "id",
+     "name",
+     "position",
+     "price",
+     "sponsored",
+     "listId",
+     "listName",
+     "type",
+     "gridBoxType",
+     "categoryPrimary",
+     "wonCategoryPrimary",
+     "wonCategoryPrimaryPath",
+     "tradeType",
+     "creativeName",
+     "promotionName",
+     "promotionId",
+     "hasColors"
+    ],
+    "raw": "{\"category\": \"Food\", \"id\": \"11004813\", \"name\": \"Vierkante donut\", \"position\": \"2.1\", \"price\": 0.69, \"sponsored\": false, \"listId\": 10008785, \"listName\": \"Aanbiedingen\", \"type\": \"p_pdp\", \"gridBoxType\": \"default\", \"categoryPrimary\": \"Food\", \"wonCategoryPrimary\": \"Werelden van nood/Eten en dichtbij voedsel/Bakkerij/Zoet gebak\", \"wonCategoryPrimaryPath\": \"0/17/1740/174012\", \"tradeType\": \"retail\", \"creativeName\": 11004813, \"promotionName\": \"Aanbiedingen\", \"promotionId\": 10008785, \"hasColors\": false}"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "category",
+     "id",
+     "name",
+     "position",
+     "price",
+     "sponsored",
+     "listId",
+     "listName",
+     "type",
+     "gridBoxType",
+     "categoryPrimary",
+     "wonCategoryPrimary",
+     "wonCategoryPrimaryPath",
+     "tradeType",
+     "creativeName",
+     "promotionName",
+     "promotionId",
+     "hasColors"
+    ],
+    "raw": "{\"category\": \"Food\", \"id\": \"11030070\", \"name\": \"Conference peren\", \"position\": \"2.4\", \"price\": 1.29, \"sponsored\": false, \"listId\": 10008785, \"listName\": \"Aanbiedingen\", \"type\": \"p_pdp\", \"gridBoxType\": \"default\", \"categoryPrimary\": \"Food\", \"wonCategoryPrimary\": \"Werelden van nood/Eten en dichtbij voedsel/Groenten & fruit/Fruit\", \"wonCategoryPrimaryPath\": \"0/17/1710/171010\", \"tradeType\": \"retail\", \"creativeName\": 11030070, \"promotionName\": \"Aanbiedingen\", \"promotionId\": 10008785, \"hasColors\": false}"
+   }
+  ],
+  "jumbo_deals_raw": [
+   {
+    "found_url": "",
+    "raw_keys": [
+     "name",
+     "discountValue",
+     "id",
+     "section",
+     "title",
+     "type",
+     "description",
+     "stickers",
+     "text",
+     "position",
+     "isSponsored",
+     "sectionName",
+     "sectionPosition",
+     "dataProcessingRestricted"
+    ],
+    "raw": "{\"name\": \"Jumbo tofu of tempeh naturel\", \"discountValue\": \"voor 1,00\", \"id\": \"3022380\", \"section\": \"category_section\", \"title\": \"Jumbo tofu of tempeh naturel\", \"type\": \"Week\", \"description\": \"Alle verpakkingen à 200-395 gram, per stuk\", \"stickers\": [], \"text\": \"voor 1,00\", \"position\": 1, \"isSponsored\": false, \"sectionName\": \"Vlees, vis en vega\", \"sectionPosition\": 4, \"dataProcessingRestricted\": false}"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "name",
+     "discountValue",
+     "id",
+     "section",
+     "title",
+     "type",
+     "description",
+     "stickers",
+     "text",
+     "position",
+     "isSponsored",
+     "sectionName",
+     "sectionPosition",
+     "dataProcessingRestricted"
+    ],
+    "raw": "{\"name\": \"Jumbo kipdijfiletblokjes\", \"discountValue\": \"voor 3,50\", \"id\": \"3022469\", \"section\": \"category_section\", \"title\": \"Jumbo kipdijfiletblokjes\", \"type\": \"Week\", \"description\": \"Schaal 350 gram, per 100 gram\", \"stickers\": [], \"text\": \"voor 3,50\", \"position\": 3, \"isSponsored\": false, \"sectionName\": \"Vlees, vis en vega\", \"sectionPosition\": 4, \"dataProcessingRestricted\": false}"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "name",
+     "discountValue",
+     "id",
+     "section",
+     "title",
+     "type",
+     "description",
+     "stickers",
+     "text",
+     "position",
+     "isSponsored",
+     "sectionName",
+     "sectionPosition",
+     "dataProcessingRestricted"
+    ],
+    "raw": "{\"name\": \"Jumbo surimisticks\", \"discountValue\": \"voor 1,00\", \"id\": \"3022509\", \"section\": \"category_section\", \"title\": \"Jumbo surimisticks\", \"type\": \"Week\", \"description\": \"Verpakking 200 gram\", \"stickers\": [], \"text\": \"voor 1,00\", \"position\": 4, \"isSponsored\": false, \"sectionName\": \"Vlees, vis en vega\", \"sectionPosition\": 4, \"dataProcessingRestricted\": false}"
+   }
+  ],
+  "hoogvliet_deals_raw": [
+   {
+    "found_url": "",
+    "raw_keys": [
+     "__typename",
+     "type",
+     "id",
+     "sku",
+     "name",
+     "thumbnail",
+     "price_range",
+     "stock_status",
+     "promotion_meta_data",
+     "webshop",
+     "max_sale_qty",
+     "child_skus",
+     "is_webshop",
+     "is_online_only",
+     "is_promotion_online_only",
+     "display_name",
+     "discount_label",
+     "discount_label_top",
+     "is_promotion_group",
+     "promotion_folder_case",
+     "meta_original_price",
+     "meta_promotion_price",
+     "categories",
+     "product_flags"
+    ],
+    "raw": "{\"__typename\": \"GroupedProduct\", \"type\": \"GroupedProduct\", \"id\": 20223, \"sku\": \"202647121\", \"name\": \"Dove of Vaseline\", \"thumbnail\": {\"url\": \"https://static.hoogvliet.nl/ecom/promoties/2026-47/202647121.jpg\", \"label\": \"Dove of Vaseline\"}, \"price_range\": {\"minimum_price\": {\"regular_price\": {\"value\": 19.18, \"currency\": \"EUR\"}, \"final_price\": {\"currency\": \"EUR\", \"value\": 9.59}, \"discount\": {\"percent_off\": 50}}}, \"stock_status\": \"IN_STOCK\", \"promotion_meta_data\": {\"korting_label\": \"1 + 1 Gratis\", \"raw_discount_label\": {\"text\": \"1 + 1 Gratis\", \"full_label\": \"1 + 1 Gratis\"}, \"valid_from\": \"2026-11-17T23:00:00Z\", \"valid_to\": \"2026-11-24T22:59:00Z\", \"prijs\": \"6.92 - 19.18\", \"promotie_prijs\": \"3.46 - 9.59\", \"promotie_beschrijving\": \"Alle soorten\", \"actietype\": \"1 + 1 Gratis\"}, \"webshop\": {\"value\": \"1\"}, \"max_sale_qty\": 48, \"child_skus\": [\"056264000\", \"064018000\", \"064019000\", \"064020000\", \"064021000\", \"064654000\", \"066091000\", \"084352000\", \"084353000\", \"084355000\", \"671582000\", \"674806000\", \"681382000\", \"681393000\", \"684763000\", \"684764000\", \"695147000\", \"718935000\", \"718936000\", \"718985000\", \"719122000\", \"719124000\", \"719305000\", \"720573000\", \"720574000\", \"720575000\", \"721527000\", \"721528000\", \"721529000\", \"721530000\", \"721935000\", \"722128000\", \"724787000\", \"725125000\", \"725127000\", \"725745000\", \"725893000\", \"725959000\", \"725960000\", \"725961000\", \"725962000\", \"725965000\", \"730175000\"], \"is_webshop\": true, \"is_online_only\": false, \"is_promotion_online_only\": false, \"display_name\": \"Do"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "__typename",
+     "type",
+     "id",
+     "sku",
+     "name",
+     "thumbnail",
+     "price_range",
+     "stock_status",
+     "promotion_meta_data",
+     "webshop",
+     "max_sale_qty",
+     "child_skus",
+     "is_webshop",
+     "is_online_only",
+     "is_promotion_online_only",
+     "display_name",
+     "discount_label",
+     "discount_label_top",
+     "discount_label_bottom",
+     "is_promotion_group",
+     "promotion_folder_case",
+     "meta_original_price",
+     "meta_promotion_price",
+     "categories",
+     "product_flags"
+    ],
+    "raw": "{\"__typename\": \"GroupedProduct\", \"type\": \"GroupedProduct\", \"id\": 20171, \"sku\": \"202647098\", \"name\": \"Danio kwark\", \"thumbnail\": {\"url\": \"https://static.hoogvliet.nl/ecom/promoties/2026-47/202647098.jpg\", \"label\": \"Danio kwark\"}, \"price_range\": {\"minimum_price\": {\"regular_price\": {\"value\": 2.93, \"currency\": \"EUR\"}, \"final_price\": {\"currency\": \"EUR\", \"value\": 1.99}, \"discount\": {\"percent_off\": 32.08}}}, \"stock_status\": \"IN_STOCK\", \"promotion_meta_data\": {\"korting_label\": \"per pak\", \"raw_discount_label\": {\"text\": \"per pak\", \"full_label\": \"per pak\", \"price\": 1.99}, \"valid_from\": \"2026-11-17T23:00:00Z\", \"valid_to\": \"2026-11-24T22:59:00Z\", \"prijs\": \"2.69 - 2.93\", \"promotie_prijs\": \"1.99\", \"promotie_beschrijving\": \"Alle bekers van 450gram\", \"actietype\": \"ACTIE\"}, \"webshop\": {\"value\": \"1\"}, \"max_sale_qty\": 48, \"child_skus\": [\"045604000\", \"051279000\", \"061641000\", \"145564000\", \"170887000\", \"170895000\"], \"is_webshop\": true, \"is_online_only\": false, \"is_promotion_online_only\": false, \"display_name\": \"Danio kwark\", \"discount_label\": \"per pak\", \"discount_label_top\": \"per pak\", \"discount_label_bottom\": 1.99, \"is_promotion_group\": true, \"promotion_folder_case\": \"promogroup\", \"meta_original_price\": {\"value\": \"2.69 - 2.93\"}, \"meta_promotion_price\": {\"value\": \"1.99\"}, \"categories\": [{\"name\": \"Aanbiedingen\", \"level\": 2, \"url_path\": \"aanbiedingen\", \"breadcrumbs\": null}, {\"name\": \"Zuivel, eieren, boter\", \"level\": 3, \"url_path\": \"aanbiedingen/zuivel-eieren-boter\", \"breadcrumbs\": null}], \"product_f"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "__typename",
+     "type",
+     "id",
+     "sku",
+     "name",
+     "thumbnail",
+     "price_range",
+     "stock_status",
+     "promotion_meta_data",
+     "webshop",
+     "max_sale_qty",
+     "child_skus",
+     "is_webshop",
+     "is_online_only",
+     "is_promotion_online_only",
+     "display_name",
+     "discount_label",
+     "discount_label_top",
+     "discount_label_bottom",
+     "is_promotion_group",
+     "promotion_folder_case",
+     "meta_original_price",
+     "meta_promotion_price",
+     "categories",
+     "product_flags"
+    ],
+    "raw": "{\"__typename\": \"GroupedProduct\", \"type\": \"GroupedProduct\", \"id\": 20014, \"sku\": \"202647067\", \"name\": \"Honig droge mix of soep\", \"thumbnail\": {\"url\": \"https://static.hoogvliet.nl/ecom/promoties/2026-47/202647067.jpg\", \"label\": \"Honig droge mix of soep\"}, \"price_range\": {\"minimum_price\": {\"regular_price\": {\"value\": 2.05, \"currency\": \"EUR\"}, \"final_price\": {\"currency\": \"EUR\", \"value\": 0.79}, \"discount\": {\"percent_off\": 61.46}}}, \"stock_status\": \"IN_STOCK\", \"promotion_meta_data\": {\"korting_label\": \"per pakje\", \"raw_discount_label\": {\"text\": \"per pakje\", \"full_label\": \"per pakje\", \"price\": 0.79}, \"valid_from\": \"2026-11-17T23:00:00Z\", \"valid_to\": \"2026-11-24T22:59:00Z\", \"prijs\": \"1.49 - 2.05\", \"promotie_prijs\": \"0.79\", \"promotie_beschrijving\": \"Alle soorten m.u.v. voordeelpakken\", \"actietype\": \"ACTIE\"}, \"webshop\": {\"value\": \"1\"}, \"max_sale_qty\": 48, \"child_skus\": [\"051885000\", \"064117000\", \"064118000\", \"068461000\", \"070517000\", \"070519000\", \"070520000\", \"083039000\", \"131849000\", \"131881000\", \"132802000\", \"181595000\", \"181617000\", \"181722000\", \"182737000\", \"186457000\", \"240303000\", \"240346000\", \"240370000\", \"240818000\", \"241091000\", \"665854000\", \"710193000\", \"714983000\", \"718160000\", \"718182000\", \"718350000\", \"718355000\", \"718357000\", \"718363000\", \"722116000\", \"722143000\", \"722144000\", \"731727000\", \"731728000\", \"731729000\"], \"is_webshop\": true, \"is_online_only\": false, \"is_promotion_online_only\": false, \"display_name\": \"Honig droge mix of soep\", \"discount_label\": \"per pakje\", \"discou"
+   }
+  ],
+  "aldi_deals_raw": [
+   {
+    "found_url": "",
+    "raw_keys": [
+     "@name",
+     "@path",
+     "@id",
+     "@nodeType",
+     "currentWeekLabel",
+     "analyticsPageType",
+     "highlightInNavigation",
+     "disableUsercentrics",
+     "description",
+     "hideInSearch",
+     "title",
+     "metaTitle",
+     "robots",
+     "nextWeekLabel",
+     "mgnl:template",
+     "navigationTitle",
+     "mgnl:lastModified",
+     "keywords",
+     "hideInNavigation",
+     "@canonical",
+     "@hrefLangTag",
+     "@headerFooter",
+     "@ancestors",
+     "@popup",
+     "headline",
+     "weekIndicator",
+     "hrefLangTag",
+     "openContent",
+     "mediaType",
+     "@nodes",
+     "header",
+     "footer",
+     "smartAppBanner",
+     "locale",
+     "i18nMap",
+     "translatedPath",
+     "isMagnoliaEdit",
+     "hasNextWeekoffers"
+    ],
+    "raw": "{\"@name\": \"aanbiedingen-deze-week\", \"@path\": \"/netherlands/aanbiedingen-deze-week\", \"@id\": \"5e3ab3a6-c1cd-428f-89d1-f61ce31af8a2\", \"@nodeType\": \"mgnl:page\", \"currentWeekLabel\": \"Deze week\", \"analyticsPageType\": \"Products:Offer Page:Website\", \"highlightInNavigation\": false, \"disableUsercentrics\": false, \"description\": \"Ga je te buiten met meer dan 200 aanbiedingen bij ALDI. Bekijk onze actuele week- en weekendaanbiedingen, en ook alvast de deals van volgende week!\", \"hideInSearch\": false, \"title\": \"Aanbiedingen van deze week\", \"metaTitle\": \"Nu in de aanbieding bij ALDI | Vlees, groente, fruit & meer\", \"robots\": \"index,follow\", \"nextWeekLabel\": \"Volgende week\", \"mgnl:template\": \"aldi-nord-foundation:pages/offerCurrent\", \"navigationTitle\": \"Aanbiedingen van deze week\", \"mgnl:lastModified\": \"2026-10-22T14:35:57.342Z\", \"keywords\": \"aanbiedingen, ALDI, korting, besparen op boodschappen\", \"hideInNavigation\": false, \"@canonical\": {\"nl\": \"/netherlands/aanbiedingen-deze-week\"}, \"@hrefLangTag\": {\"nl\": \"/netherlands/aanbiedingen-deze-week\"}, \"@headerFooter\": \"/netherlands\", \"@ancestors\": [{\"label\": \"ALDI Supermarkten\", \"path\": \"/netherlands\", \"hideInNavigation\": false}], \"@popup\": \"\", \"headline\": {\"@name\": \"headline\", \"@path\": \"/netherlands/aanbiedingen-deze-week/headline\", \"@id\": \"bfe62063-6379-4e85-8edf-da1c1c2a8808\", \"@nodeType\": \"mgnl:contentNode\", \"mgnl:lastModified\": \"2026-05-08T14:09:22.439Z\", \"props\": {\"@name\": \"props\", \"@path\": \"/netherlands/aanbiedingen-deze-week/headline/props"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "@name",
+     "@path",
+     "@id",
+     "@nodeType",
+     "currentWeekLabel",
+     "analyticsPageType",
+     "highlightInNavigation",
+     "disableUsercentrics",
+     "description",
+     "hideInSearch",
+     "title",
+     "metaTitle",
+     "robots",
+     "nextWeekLabel",
+     "mgnl:template",
+     "navigationTitle",
+     "mgnl:lastModified",
+     "keywords",
+     "hideInNavigation",
+     "@canonical",
+     "@hrefLangTag",
+     "@headerFooter",
+     "@ancestors",
+     "@popup",
+     "headline",
+     "weekIndicator",
+     "hrefLangTag",
+     "openContent",
+     "mediaType",
+     "@nodes",
+     "header",
+     "footer",
+     "smartAppBanner",
+     "locale",
+     "i18nMap",
+     "translatedPath",
+     "isMagnoliaEdit",
+     "hasNextWeekoffers"
+    ],
+    "raw": "{\"@name\": \"aanbiedingen-deze-week\", \"@path\": \"/netherlands/aanbiedingen-deze-week\", \"@id\": \"5e3ab3a6-c1cd-428f-89d1-f61ce31af8a2\", \"@nodeType\": \"mgnl:page\", \"currentWeekLabel\": \"Deze week\", \"analyticsPageType\": \"Products:Offer Page:Website\", \"highlightInNavigation\": false, \"disableUsercentrics\": false, \"description\": \"Ga je te buiten met meer dan 200 aanbiedingen bij ALDI. Bekijk onze actuele week- en weekendaanbiedingen, en ook alvast de deals van volgende week!\", \"hideInSearch\": false, \"title\": \"Aanbiedingen van deze week\", \"metaTitle\": \"Nu in de aanbieding bij ALDI | Vlees, groente, fruit & meer\", \"robots\": \"index,follow\", \"nextWeekLabel\": \"Volgende week\", \"mgnl:template\": \"aldi-nord-foundation:pages/offerCurrent\", \"navigationTitle\": \"Aanbiedingen van deze week\", \"mgnl:lastModified\": \"2026-10-22T14:35:57.342Z\", \"keywords\": \"aanbiedingen, ALDI, korting, besparen op boodschappen\", \"hideInNavigation\": false, \"@canonical\": {\"nl\": \"/netherlands/aanbiedingen-deze-week\"}, \"@hrefLangTag\": {\"nl\": \"/netherlands/aanbiedingen-deze-week\"}, \"@headerFooter\": \"/netherlands\", \"@ancestors\": [{\"label\": \"ALDI Supermarkten\", \"path\": \"/netherlands\", \"hideInNavigation\": false}], \"@popup\": \"\", \"headline\": {\"@name\": \"headline\", \"@path\": \"/netherlands/aanbiedingen-deze-week/headline\", \"@id\": \"bfe62063-6379-4e85-8edf-da1c1c2a8808\", \"@nodeType\": \"mgnl:contentNode\", \"mgnl:lastModified\": \"2026-05-08T14:09:22.439Z\", \"props\": {\"@name\": \"props\", \"@path\": \"/netherlands/aanbiedingen-deze-week/headline/props"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "productName",
+     "productID",
+     "variantID",
+     "brand",
+     "priceWithTax",
+     "discount",
+     "strikePrice",
+     "quantity"
+    ],
+    "raw": "{\"productName\": \"Vloeibaar met olijfolie\", \"productID\": \"1200410\", \"variantID\": \"1200410\", \"brand\": \"BECEL\", \"priceWithTax\": 1.99, \"discount\": \"OP=OP\", \"strikePrice\": 0, \"quantity\": 1}"
+   }
+  ],
+  "kruidvat_deals_raw": [
+   {
+    "found_url": "",
+    "raw_keys": [
+     "egiftcard",
+     "marketplace",
+     "removeProduct",
+     "addProduct",
+     "title",
+     "emailDeliveryText",
+     "mainCTA",
+     "freeDeliveryThreshold",
+     "total",
+     "discountLabel",
+     "outOfStock",
+     "autoCloseMessage",
+     "maxQuantityLabel",
+     "countLabel",
+     "priceLabel"
+    ],
+    "raw": "{\"egiftcard\": {\"emailDeliveryText\": \"Ontvang je cadeaukaart direct in je mailbox.\"}, \"marketplace\": {\"message\": \"Verkocht en verstuurd door partner\"}, \"removeProduct\": \"Product {{productName}} is uit de winkelmand verwijderd\", \"addProduct\": \"Product {{productName}} is toegevoegd aan de winkelmand\", \"title\": \"Mijn Winkelmandje\", \"emailDeliveryText\": \"Je voucher code(s) zal binnen een paar uur per mail naar je worden verzonden.\", \"mainCTA\": \"Bekijk winkelmand\", \"freeDeliveryThreshold\": \"Gratis verzending vanaf 50 euro besteding\", \"total\": \"{{total}}\", \"discountLabel\": \"Totale korting {{value}}\", \"outOfStock\": {\"message\": \"Helaas, dit artikel is niet toegevoegd aan je winkelmandje omdat het niet op voorraad is.\"}, \"autoCloseMessage\": \"Mini cart geopend. Sluit automatisch over {{seconds}} seconden.\", \"maxQuantityLabel\": \"99+ producten\", \"countLabel\": \"{{count}} producten\", \"priceLabel\": \"Totaalbedrag {{value}}\"}"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "name"
+    ],
+    "raw": "{\"name\": \"Freemium Banner\"}"
+   },
+   {
+    "found_url": "",
+    "raw_keys": [
+     "showMore",
+     "free",
+     "layover",
+     "title"
+    ],
+    "raw": "{\"showMore\": \"Andere opties bekijken\", \"free\": {\"item\": {\"label\": \"gratis\"}}, \"layover\": {\"description\": \"Kies welk product je wilt toevoegen\", \"title\": \"Gratis product\"}, \"title\": \"Vergeet je gratis product niet\"}"
+   }
+  ]
+ },
+ "search": {
+  "Albert Heijn": [
+   {
+    "url": "https://www.ah.nl/zoeken?query=pindakaas",
+    "status": 403,
+    "final": "https://www.ah.nl/zoeken?query=pindakaas",
+    "title": "Access Denied",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "Jumbo": [
+   {
+    "url": "https://www.jumbo.com/zoeken/?searchTerms=pindakaas",
+    "status": 404,
+    "final": "https://www.jumbo.com/zoeken/?searchTerms=pindakaas",
+    "title": "404 - Altijd lage prijzen op je dagelijkse boodschappen | Jumbo Supermarkten",
+    "term_hits": 0,
+    "notfound": true
+   }
+  ],
+  "Hoogvliet": [
+   {
+    "url": "https://www.hoogvliet.com/zoeken?query=pindakaas",
+    "status": 200,
+    "final": "https://hoogvliet.nl/search?query=pindakaas",
+    "title": "Alle Producten",
+    "term_hits": 0,
+    "notfound": true
+   },
+   {
+    "url": "https://www.hoogvliet.com/search?q=pindakaas",
+    "status": 200,
+    "final": "https://hoogvliet.nl/search?q=pindakaas",
+    "title": "Alle Producten",
+    "term_hits": 0,
+    "notfound": true
+   },
+   {
+    "url": "https://www.hoogvliet.com/zoeken?q=pindakaas",
+    "status": 200,
+    "final": "https://hoogvliet.nl/search?q=pindakaas",
+    "title": "Alle Producten",
+    "term_hits": 0,
+    "notfound": true
+   }
+  ],
+  "Aldi": [
+   {
+    "url": "https://www.aldi.nl/zoeken.html?query=pindakaas",
+    "status": 200,
+    "final": "https://www.aldi.nl/zoeken.html?query=pindakaas",
+    "title": "Search Page with Results",
+    "term_hits": 19,
+    "notfound": false
+   },
+   {
+    "url": "https://www.aldi.nl/search.html?query=pindakaas",
+    "status": 404,
+    "final": "https://www.aldi.nl/search.html?query=pindakaas",
+    "title": "404",
+    "term_hits": 1,
+    "notfound": true
+   },
+   {
+    "url": "https://www.aldi.nl/zoeken.html?q=pindakaas",
+    "status": 200,
+    "final": "https://www.aldi.nl/zoeken.html?q=pindakaas",
+    "title": "Search Page with Results",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "Lidl": [
+   {
+    "url": "https://www.lidl.nl/q/search?q=pindakaas",
+    "status": 200,
+    "final": "https://www.lidl.nl/q/search?q=pindakaas",
+    "title": "Zoekresultaten voor lidl.nl voor: pindakaas",
+    "term_hits": 0,
+    "notfound": true
+   }
+  ],
+  "Kruidvat": [
+   {
+    "url": "https://www.kruidvat.nl/search?q=tandpasta&text=tandpasta",
+    "status": 200,
+    "final": "https://www.kruidvat.nl/search/tandpasta?query=tandpasta",
+    "title": "Search Results Page tandpasta | Kruidvat",
+    "term_hits": 17,
+    "notfound": false
+   },
+   {
+    "url": "https://www.kruidvat.nl/search?text=tandpasta",
+    "status": 200,
+    "final": "https://www.kruidvat.nl/search?text=tandpasta",
+    "title": "Search Results Page undefined | Kruidvat",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "Etos": [
+   {
+    "url": "https://www.etos.nl/search/?q=tandpasta",
+    "status": 403,
+    "final": "https://www.etos.nl/mondhygiene/tandpasta/",
+    "title": "Etos",
+    "term_hits": 0,
+    "notfound": false
+   },
+   {
+    "url": "https://www.etos.nl/zoeken/?q=tandpasta",
+    "status": 404,
+    "final": "https://www.etos.nl/zoeken/?q=tandpasta",
+    "title": "Etos",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "PLUS": [
+   {
+    "url": "https://www.plus.nl/zoekresultaten?SearchTerm=pindakaas",
+    "status": 200,
+    "final": "https://www.plus.nl/zoekresultaten?SearchTerm=pindakaas",
+    "title": "Zoekresultaten | PLUS",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "Dirk": [
+   {
+    "url": "https://www.dirk.nl/zoeken/producten/pindakaas",
+    "status": 200,
+    "final": "https://www.dirk.nl/zoeken/producten/pindakaas",
+    "title": "Zoekresultaten voor pindakaas. Nu bij Dirk! | Dirk",
+    "term_hits": 17,
+    "notfound": false
+   },
+   {
+    "url": "https://www.dirk.nl/zoeken?query=pindakaas",
+    "status": 200,
+    "final": "https://www.dirk.nl/zoeken?query=pindakaas",
+    "title": "Zoeken | Dirk",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "DekaMarkt": [
+   {
+    "url": "https://www.dekamarkt.nl/zoeken?zoekterm=pindakaas",
+    "status": 200,
+    "final": "https://www.dekamarkt.nl/zoeken?zoekterm=pindakaas",
+    "title": "Zoeken | DekaMarkt",
+    "term_hits": 0,
+    "notfound": false
+   },
+   {
+    "url": "https://www.dekamarkt.nl/zoeken?q=pindakaas",
+    "status": 200,
+    "final": "https://www.dekamarkt.nl/zoeken?q=pindakaas",
+    "title": "Zoeken | DekaMarkt",
+    "term_hits": 0,
+    "notfound": false
+   },
+   {
+    "url": "https://www.dekamarkt.nl/zoeken/pindakaas",
+    "status": 200,
+    "final": "https://www.dekamarkt.nl/zoeken/pindakaas",
+    "title": "pindakaas | DekaMarkt!",
+    "term_hits": 19,
+    "notfound": false
+   }
+  ],
+  "Vomar": [
+   {
+    "url": "https://www.vomar.nl/zoeken?search=pindakaas",
+    "status": 200,
+    "final": "https://www.vomar.nl/zoeken?search=pindakaas",
+    "title": "Vomar Voordeelmarkt",
+    "term_hits": 14,
+    "notfound": false
+   },
+   {
+    "url": "https://www.vomar.nl/zoeken?q=pindakaas",
+    "status": 200,
+    "final": "https://www.vomar.nl/zoeken?q=pindakaas",
+    "title": "Vomar Voordeelmarkt",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "Spar": [
+   {
+    "url": "https://www.spar.nl/zoeken/?q=pindakaas",
+    "status": 404,
+    "final": "https://www.spar.nl/zoeken/?q=pindakaas",
+    "title": "SPAR | oeps, ben je verdwaald? zie je door de sparren het bos niet meer?",
+    "term_hits": 0,
+    "notfound": false
+   },
+   {
+    "url": "https://www.spar.nl/zoeken?q=pindakaas",
+    "status": 404,
+    "final": "https://www.spar.nl/zoeken?q=pindakaas",
+    "title": "SPAR | oeps, ben je verdwaald? zie je door de sparren het bos niet meer?",
+    "term_hits": 0,
+    "notfound": false
+   }
+  ],
+  "Gall & Gall": [
+   {
+    "url": "https://www.gall.nl/search?q=whisky",
+    "status": 404,
+    "final": "https://www.gall.nl/search?q=whisky",
+    "title": "404 - Pagina niet gevonden",
+    "term_hits": 1,
+    "notfound": true
+   },
+   {
+    "url": "https://www.gall.nl/zoeken?q=whisky",
+    "status": 200,
+    "final": "https://www.gall.nl/whisky/",
+    "title": "Online Whisky bestellen? Koop hier je Whisky | Gall & Gall",
+    "term_hits": 45,
+    "notfound": false
+   }
+  ],
+  "Action": [
+   {
+    "url": "https://www.action.com/nl-nl/search/?q=kaars",
+    "status": 200,
+    "final": "https://www.action.com/nl-nl/search/?q=kaars",
+    "title": "Search | Action NL",
+    "term_hits": 23,
+    "notfound": false
+   }
+  ],
+  "Makro": [
+   {
+    "url": "https://www.makro.nl/shop/search?q=koffie",
+    "status": 404,
+    "final": "https://www.makro.nl/shop/search?q=koffie",
+    "title": "Pagina niet gevonden - 404 error",
+    "term_hits": 0,
+    "notfound": true
+   }
+  ]
+ }
+}

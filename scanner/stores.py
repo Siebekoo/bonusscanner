@@ -7,7 +7,7 @@ under "Volgende week". Deals whose start date is in the future go there automati
 """
 from __future__ import annotations
 
-from . import ah, jumbo, browser, plus
+from . import ah, jumbo, browser, plus, links
 
 STORES = {
     "ah": {
@@ -130,7 +130,9 @@ def run_store(key: str, **opts):
                 if deals:
                     print(f"    {cfg['name']}: found deals at {alt}  (tip: put this URL in scanner/stores.py)")
                     break
+    pages = [cfg.get("url", ""), *cfg.get("extra_urls", ()), cfg.get("next_url", "")]
     for d in deals:
         d.store = cfg["name"]
+        links.fix(d, pages)
         d.finalize()
     return deals

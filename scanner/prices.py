@@ -17,11 +17,16 @@ from typing import Optional
 
 from .enrich import product_key, strip_accents
 from .models import Deal, MULTI
+from . import links
 
 SOURCE_URL = "https://raw.githubusercontent.com/supermarkt/checkjebon/main/data/supermarkets.json"
 STORE_NAMES = {"ah": "Albert Heijn", "aldi": "Aldi", "dekamarkt": "DekaMarkt", "dirk": "Dirk",
                "ekoplaza": "Ekoplaza", "hoogvliet": "Hoogvliet", "jumbo": "Jumbo", "lidl": "Lidl",
                "plus": "PLUS", "poiesz": "Poiesz", "spar": "Spar", "vomar": "Vomar"}
+
+# The price list's links for these stores lead to "not found" (DekaMarkt) or to a
+# third-party site (Lidl), so they link to the store's own search results instead.
+BROKEN_LINKS = {"DekaMarkt", "Lidl"}
 
 # ---------------------------------------------------------------- download
 
@@ -204,9 +209,12 @@ def build(data: list, deals: list[Deal]) -> dict:
             if not isinstance(price, (int, float)) or not (0 < price < 2000) or not p.get("n"):
                 continue
             amt = amount_for(p["n"], p.get("s", ""))
+            link = p.get("l", "")
+            if name in BROKEN_LINKS:          # the price list's own links don't work here
+                link = links.search_url(name, p["n"]) or ""
             items.append({"store": name, "name": p["n"], "price": round(float(price), 2),
                           "size": p.get("s", ""), "qty": amt[0] if amt else None,
-                          "unit": amt[1] if amt else "", "url": p.get("l", ""), "prefix": prefix,
+                          "unit": amt[1] if amt else "", "url": link, "prefix": prefix,
                           "deal": "", "pay": None, "min_qty": 1})
     items = attach_deals(items, deals)
 

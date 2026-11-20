@@ -116,13 +116,22 @@ def test_page_in_browser():
         pg.fill("#q", "cola"); pg.wait_for_timeout(300)
         assert 0 < n() < 20
         pg.fill("#q", ""); pg.wait_for_timeout(300)
-        pg.check("#cmp"); assert pg.locator(".cmp").count() > 3; pg.uncheck("#cmp")
+        pg.click("#openFilters"); pg.wait_for_timeout(300)
+        pg.click("label.switch"); pg.click("#done"); pg.wait_for_timeout(300)
+        assert pg.locator(".cmp").count() > 3
+        pg.click("#openFilters"); pg.wait_for_timeout(300); pg.click("label.switch"); pg.click("#done")
+        # every tile opens its product: one full-size link per tile
+        assert pg.locator("#grid .card a.go").count() == pg.locator("#grid .card").count()
+        # store chips: picking two stores shows only those two
+        pg.locator("#stores .chip", has_text="Jumbo").click(); pg.locator("#stores .chip", has_text="Lidl").click()
+        assert set(pg.locator("#grid .who").all_inner_texts()) <= {"Jumbo", "Lidl"}
+        pg.locator("#stores .chip", has_text="Alle winkels").click()
         pg.locator("#grid .star").first.click()
-        pg.locator(".tab", has_text="Mijn lijst").click()
+        pg.locator("#tabsTop .tab", has_text="Mijn lijst").click()
         assert n() >= 1
         pg.reload(); pg.wait_for_timeout(200)
         assert n() >= 1, "favorites should survive a reload"
-        pg.locator(".tab", has_text="Volgende week").click(); assert n() > 10
+        pg.locator("#tabsTop .tab", has_text="Volgende week").click(); assert n() > 10
         pg.click("#theme")
         b.close()
     assert not errors, errors
@@ -188,7 +197,8 @@ def test_cheapest_tab_in_browser():
         groups = pg.locator(".grp").all_inner_texts()
         assert groups[0].startswith("Goedkoopst per rol"), groups
         first = pg.locator(".prow").first.inner_text()
-        assert "Jumbo Toiletpapier 2-laags" in first and "0,26" in first, first
+        assert "Jumbo Toiletpapier 2-laags" in first, first
+        assert pg.locator(".prow .tag").first.get_attribute("aria-label") == "€0,26"
         assert any("per doekje" in g for g in groups)        # wipes kept apart
         b.close()
     assert not errors, errors
@@ -283,6 +293,24 @@ def test_page_that_reloads_itself():
     srv = _serve(); base = f"http://127.0.0.1:{srv.server_port}"
     deals = browser.fetch_page("Reload", base + "/shop_reload.html", max_scrolls=8)
     assert len(deals) == 6, len(deals)          # the 6 products of shop_dom.html
+
+def test_links():
+    from scanner import links
+    from scanner.models import Deal
+    d = Deal(store="Lidl", title="Mango", url="https://www.lidl.nl/c/aanbiedingen/a10008785")
+    d._raw = {"id": "11029883", "name": "Mango"}
+    links.fix(d, ["https://www.lidl.nl/c/aanbiedingen/a10008785"])
+    assert d.url == "https://www.lidl.nl/p/mango/p11029883"
+    d = Deal(store="Aldi", title="Goudse kaasplakken 48+ 300 g", url="https://www.aldi.nl/aanbiedingen.html")
+    links.fix(d, ["https://www.aldi.nl/aanbiedingen.html"])
+    assert d.url == "https://www.aldi.nl/zoeken.html?query=Goudse+kaasplakken+48%2B"
+    d = Deal(store="PLUS", title="x", url="https://www.plus.nl/aanbiedingen/4455-85")
+    links.fix(d, ["https://www.plus.nl/aanbiedingen"])
+    assert d.url.endswith("4455-85")                 # a real deal page is kept
+    from scanner import prices
+    p = prices.build([{"n": "dekamarkt", "u": "https://www.dekamarkt.nl/boodschappen/x/x/x/",
+                       "d": [{"n": "DekaMarkt Pindakaas", "l": "123", "p": 2.0, "s": "350 g"}]}], [])
+    assert p["items"][0][6] == "https://www.dekamarkt.nl/zoeken/DekaMarkt+Pindakaas"
 
 def test_report():
     out = Path(tempfile.mkdtemp()) / "x.html"
